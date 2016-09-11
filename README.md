@@ -1,0 +1,1 @@
+# husky-support-platform
