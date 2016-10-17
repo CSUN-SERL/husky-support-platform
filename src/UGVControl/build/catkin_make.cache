@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/anthony/UGVControl/devel -DCMAKE_INSTALL_PREFIX=/home/anthony/UGVControl/install -G Unix Makefiles
