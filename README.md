@@ -1,1 +1,2 @@
-# husky-support-platform
+# Husky GUI
+
