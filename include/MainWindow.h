@@ -19,11 +19,13 @@ public:
 public slots:
     void OnLeftClicked();
     void OnRightClicked();
-    void OnUpClicked();
+    void OnUpClicked(bool checked);
     void OnDownClicked();
     void OnCloseClicked();
     void OnGoClicked();
     void OnStopClicked();
+    //test
+    void loc_ButtonClicked();
         
 private:
     Ui::MainWindow widget;
