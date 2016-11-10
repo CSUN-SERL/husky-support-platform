@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    ros::init(argc, argv, "turtle_teleop_key_gui");
+    ros::init(argc, argv, "TesterGUI");
     ros::AsyncSpinner spinner(1);
     spinner.start();
     
