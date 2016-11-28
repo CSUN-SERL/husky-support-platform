@@ -3,23 +3,26 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <QTextEdit>
+#include <QKeyEvent>
 
 MainWindow::MainWindow():
-    linear_scale(2),
-    angular_scale(2),
+    linear_scale(10),// was two // makes it so it goes further
+    angular_scale(10), // was two and a comma 
     linear(0),
     angular(0)
 {
     widget.setupUi(this);
 
-    pub_cmd_vel = nh.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel", 1);
+    pub_cmd_vel = nh.advertise<geometry_msgs::Twist>("/husky_velocity_controller/cmd_vel", 1);
 
     
     image_transport::ImageTransport it{nh};
     
     sub_img = it.subscribe("/usb_cam/image_raw", 100, &MainWindow::ImageCallback, this);
 
-
+// going to qt creator and taking off focus policy, was at strong focus
+  //  connect(widget.btn_up, &QWidget::keyPressEvent()
+    //        this, &MainWindow::OnUpClicked);
     connect(widget.btn_up, &QPushButton::clicked,
             this, &MainWindow::OnUpClicked);
     connect(widget.btn_left, &QPushButton::clicked,
@@ -70,6 +73,7 @@ void MainWindow::TranslateAndPublish()
     geometry_msgs::Twist twist;
     twist.angular.z = angular_scale * angular;
     twist.linear.x = linear_scale * linear;
+    //twist.linear.y = linear_scale * linear; 
     pub_cmd_vel.publish(twist);
     
     linear = angular = 0;
@@ -89,14 +93,12 @@ void MainWindow::OnRightClicked()
     this->TranslateAndPublish();
 }
 
-void MainWindow::OnUpClicked(bool checked)
+void MainWindow::OnUpClicked()
 {
     widget.textEdit->append("I am going up, on a Tuesday!\n");
-    if(checked)
-    {
-    linear = 1;
+    linear = 10; // was one
     this->TranslateAndPublish();
-    }
+    
 }
 
 void MainWindow::OnDownClicked()
@@ -108,8 +110,10 @@ void MainWindow::OnDownClicked()
 
 void MainWindow::OnCloseClicked()
 {
-    
-    this ->close();
+   
+   this ->close();
+    system("rosnode kill usb_cam");
+    system("rosnode kill image_view");
 }
 
 void MainWindow::OnGoClicked() // this will just make the turtle sim go out 10 spaces
@@ -131,13 +135,13 @@ void MainWindow::OnStopClicked()
 
 // testing the input system
 void MainWindow::loc_ButtonClicked()
-{
+{ 
     //tring text;
     //xt -> 
-    int lat = 0;
-    int longitude = 0;
-    lat = widget.LatBox -> text().toInt();
-    longitude = widget.LongBox -> text().toInt();
+    double lat = 0;
+    double longitude = 0;
+    lat = widget.LatBox -> text().toDouble();
+    longitude = widget.LongBox -> text().toDouble();
     linear = lat;
    // this -> TranslateAndPublish();
     angular = longitude;

@@ -19,7 +19,7 @@ public:
 public slots:
     void OnLeftClicked();
     void OnRightClicked();
-    void OnUpClicked(bool checked);
+    void OnUpClicked();
     void OnDownClicked();
     void OnCloseClicked();
     void OnGoClicked();
