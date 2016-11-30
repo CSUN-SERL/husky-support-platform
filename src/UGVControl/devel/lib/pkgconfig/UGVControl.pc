@@ -1,8 +1,0 @@
-prefix=/home/michel/UGVControl/devel
-
-Name: UGVControl
-Description: Description of UGVControl
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/michel/UGVControl/devel/lib 
-Requires: 
