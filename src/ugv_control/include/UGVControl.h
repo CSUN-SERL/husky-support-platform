@@ -11,13 +11,15 @@
 class UGVControl{
 
     public:
-        UGVControl(){}
+        UGVControl();
+        
+        ~UGVControl();
 
-        void crawl(double f){}
+        void crawl(double f);
 
-        void turn(double r){}
+        void turn(double r);
 
-        void stop(){}
+        void stop();
 
     private:
         double forward;
@@ -30,25 +32,14 @@ class UGVControl{
         ros::Timer moveTimer;
         sensor_msgs::LaserScan laser;
 
-        void InitialSetup(){}
+        void InitialSetup();
 
-        void move(const ros::TimerEvent& event){}
+        void move(const ros::TimerEvent& event);
 
-        void LaserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
-        {
-            laser=*scan;
-            for(int i = 0; i < laser.ranges.size(); i++){
-            	ROS_INFO("point_of_ranges=[%f] \n", laser.ranges[i]); // this works
-           }
-        }
+        void LaserCallback(const sensor_msgs::LaserScan::ConstPtr& scan);
 
-        void LocationCallback(const nav_msgs::Odometry::ConstPtr& msg)
-        {
-          ROS_INFO("Seq: [%d]", msg->header.seq);
-          ROS_INFO("Position-> x: [%f], y: [%f], z: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y, msg->pose.pose.position.z);
-          ROS_INFO("Orientation-> x: [%f], y: [%f], z: [%f], w: [%f]", msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
-          ROS_INFO("Vel-> Linear: [%f], Angular: [%f]", msg->twist.twist.linear.x,msg->twist.twist.angular.z);
-        }
+        void LocationCallback(const nav_msgs::Odometry::ConstPtr& msg);
+        
 };
 
 #endif /* HUSKY_MOVER_H */

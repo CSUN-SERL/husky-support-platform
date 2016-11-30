@@ -1,4 +1,4 @@
-#include "/home/michel/catkin_ws/src/husky/include/UGVControl.h"
+#include "UGVControl.h"
 
 
 int main(int argc, char **argv)

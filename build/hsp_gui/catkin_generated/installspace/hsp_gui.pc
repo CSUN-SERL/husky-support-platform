@@ -1,0 +1,8 @@
+prefix=/home/anthony/husky-support-platform/install
+
+Name: hsp_gui
+Description: Description of hsp_gui
+Version: 0.0.0
+Cflags: -I/home/anthony/husky-support-platform/install/include -I/usr/include/x86_64-linux-gnu/qt5/ -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/lib/x86_64-linux-gnu/qt5//mkspecs/linux-g++-64 -I/usr/include
+Libs: -L/home/anthony/husky-support-platform/install/lib -lhsp_gui -l:/usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5.5.1
+Requires: roscpp geometry_msgs
