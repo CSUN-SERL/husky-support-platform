@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/anthony/UGVControl/src
+CMAKE_SOURCE_DIR = /home/michel/UGVControl/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/anthony/UGVControl/build
+CMAKE_BINARY_DIR = /home/michel/UGVControl/build
 
 # Utility rule file for tests.
 
@@ -67,6 +67,6 @@ CMakeFiles/tests.dir/clean:
 .PHONY : CMakeFiles/tests.dir/clean
 
 CMakeFiles/tests.dir/depend:
-	cd /home/anthony/UGVControl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/anthony/UGVControl/src /home/anthony/UGVControl/src /home/anthony/UGVControl/build /home/anthony/UGVControl/build /home/anthony/UGVControl/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/michel/UGVControl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/michel/UGVControl/src /home/michel/UGVControl/src /home/michel/UGVControl/build /home/michel/UGVControl/build /home/michel/UGVControl/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/tests.dir/depend
 

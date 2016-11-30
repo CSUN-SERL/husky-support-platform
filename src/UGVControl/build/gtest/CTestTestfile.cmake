@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
 # Source directory: /usr/src/gtest
-# Build directory: /home/anthony/UGVControl/build/gtest
+# Build directory: /home/michel/UGVControl/build/gtest
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
