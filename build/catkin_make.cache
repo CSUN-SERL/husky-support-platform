@@ -1,2 +1,0 @@
-hsp_gui:ugv_control
--DCMAKE_BUILD_TYPE=debug -DCATKIN_DEVEL_PREFIX=/home/anthony/husky-support-platform/devel -DCMAKE_INSTALL_PREFIX=/home/anthony/husky-support-platform/install -G Unix Makefiles

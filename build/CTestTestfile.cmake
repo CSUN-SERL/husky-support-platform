@@ -1,9 +1,0 @@
-# CMake generated Testfile for 
-# Source directory: /home/anthony/husky-support-platform/src
-# Build directory: /home/anthony/husky-support-platform/build
-# 
-# This file includes the relevant testing commands required for 
-# testing this directory and lists subdirectories to be tested as well.
-subdirs(gtest)
-subdirs(ugv_control)
-subdirs(hsp_gui)

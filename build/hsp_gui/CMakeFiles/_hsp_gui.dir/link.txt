@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC  -std=c++11 -g  -shared -Wl,-soname,lib_hsp_gui.so -o /home/anthony/husky-support-platform/devel/lib/lib_hsp_gui.so CMakeFiles/_hsp_gui.dir/src/MainWindow.cpp.o CMakeFiles/_hsp_gui.dir/include/moc_MainWindow.cpp.o 

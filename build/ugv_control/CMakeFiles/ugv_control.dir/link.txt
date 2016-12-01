@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC -g  -shared -Wl,-soname,libugv_control.so -o /home/anthony/husky-support-platform/devel/lib/libugv_control.so CMakeFiles/ugv_control.dir/src/UGVControl.cpp.o 
