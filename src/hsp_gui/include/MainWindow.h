@@ -6,12 +6,13 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h> // using this to get the messages from usb cam
 #include <image_transport/image_transport.h> // need this to convert or transport the images
+#include "UGVControl.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow();
+    MainWindow(UGVControl *husky);
     virtual ~MainWindow();
     
     void ImageCallback(const sensor_msgs::ImageConstPtr& msg);
@@ -26,8 +27,11 @@ public slots:
     void OnStopClicked();
     //test
     void loc_ButtonClicked();
+    void autoClicked();
+    void OnReleased();
         
 private:
+    UGVControl *husky;
     Ui::MainWindow widget;
     ros::NodeHandle nh;
     ros::Publisher pub_cmd_vel;

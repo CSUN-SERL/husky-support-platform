@@ -1,10 +1,10 @@
 
 <package>
     
-    <name>hsp_gui</name>
+    <name>qt_ros</name>
     <version>0.0.0</version>
     <description>
-        husky support platform gui
+        bare bones ros package with a QMainWindow that does not rely on rqt.
     </description>
     <maintainer email="floydwin7@gmail.com">mtbrobotanist</maintainer>
     <license>BSD</license>
