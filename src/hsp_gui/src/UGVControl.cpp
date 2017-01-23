@@ -14,15 +14,18 @@
 
           }
 
-        void UGVControl::crawl(double f){
+        void UGVControl::crawl(double f)
+        {
             forward = f;
         }
 
-        void UGVControl::turn(double r){
+        void UGVControl::turn(double r)
+        {
             rotate = r;
         }
 
-        void UGVControl::stop(){
+        void UGVControl::stop()
+        {
             forward = 0;
             rotate = 0;
         }
@@ -51,7 +54,8 @@
         void UGVControl::LaserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
         {
             laser=*scan;
-            for(int i = 0; i < laser.ranges.size(); i++){
+            for(int i = 0; i < laser.ranges.size(); i++)
+            {
             	ROS_INFO("point_of_ranges=[%f] \n", laser.ranges[i]); // this works
            }
         }

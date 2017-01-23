@@ -31,28 +31,41 @@ MainWindow::MainWindow(UGVControl *husky):
     //        this, &MainWindow::OnUpClicked);
     connect(widget.btn_up, &QPushButton::pressed,
             this, &MainWindow::OnUpClicked);
-    connect(widget.btn_left, &QPushButton::pressed,
-            this, &MainWindow::OnLeftClicked);
-    connect(widget.btn_right, &QPushButton::pressed,
-            this, &MainWindow::OnRightClicked);
-    connect(widget.btn_down, &QPushButton::pressed,
-            this, &MainWindow::OnDownClicked);
     connect(widget.btn_up, &QPushButton::released,
             this, &MainWindow::OnReleased);
+    
+    
+    connect(widget.btn_left, &QPushButton::pressed,
+            this, &MainWindow::OnLeftClicked);
     connect(widget.btn_left, &QPushButton::released,
             this, &MainWindow::OnReleased);
+    
+    connect(widget.btn_right, &QPushButton::pressed,
+            this, &MainWindow::OnRightClicked);
     connect(widget.btn_right, &QPushButton::released,
             this, &MainWindow::OnReleased);
+    
+    connect(widget.btn_down, &QPushButton::pressed,
+            this, &MainWindow::OnDownClicked);
     connect(widget.btn_down, &QPushButton::released,
             this, &MainWindow::OnReleased);
+    
     connect(widget.close_button, &QPushButton::clicked,
             this, &MainWindow::OnCloseClicked);
+    
     connect(widget.Go_Button, &QPushButton::clicked,
             this, &MainWindow::OnGoClicked);
+    //connect(widget.Go_Button, &QPushButton::released,
+       //     this, &MainWindow::OnReleased);
+    
     connect(widget.stop_Button, &QPushButton::clicked,
             this, &MainWindow::OnStopClicked);
-    connect(widget.loc_Button, &QPushButton::clicked,
+    
+    connect(widget.loc_Button, &QPushButton::pressed,
             this,&MainWindow::loc_ButtonClicked);
+    connect(widget.loc_Button, &QPushButton::released,
+            this,&MainWindow::OnReleased);
+    
     connect(widget.AutoButton, &QPushButton::clicked,
             this,&MainWindow::autoClicked);
   
@@ -138,8 +151,10 @@ void MainWindow::OnCloseClicked()
 void MainWindow::OnGoClicked() // this will just make the turtle sim go out 10 spaces
 {
    // ROS_WARN_STREAM("in On Go Clicked will go forth 10 spaces");
-    widget.textEdit->setText("Will go forward 100 spaces\n");
-    husky -> crawl(100);
+    widget.textEdit->setText("Will go forward 10 spaces\n");
+    husky -> crawl(10);
+    //widget.textEdit->setText("Will go backwards 5 spaces\n");
+    //husky -> crawl(-5);
     //linear = 10;
     //angular = 10;
     //this -> TranslateAndPublish();

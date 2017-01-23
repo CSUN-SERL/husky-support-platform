@@ -23,7 +23,8 @@ void runCam()
 
 void runGazebo()
 {
-    system("roslaunch husky_gazebo husky_empty_world.launch");
+    //system("roslaunch husky_gazebo husky_empty_world.launch");
+    system("roslaunch husky_gazebo husky_playpen.launch");;
 }
 int main(int argc, char *argv[])
 {
