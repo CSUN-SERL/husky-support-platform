@@ -10,10 +10,7 @@
  there and we have to press run twice, which creates issues. This way each
  thread is executed individually just have to call them at the right time.*/
 
-void rosCoreRun()
-{
-    system("roscore");
-}
+
 
 void runCam()
 {
