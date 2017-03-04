@@ -1,3 +1,4 @@
 build
 devel
 nbproject
+/src/path_planning/dist/

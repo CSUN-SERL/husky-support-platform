@@ -7,25 +7,27 @@
  */
 
 #include "obstacle.h"
+#include <vector>
 
-
-obstacle::obstacle() {
+Obstacle::Obstacle() {
 }
 
-obstacle::obstacle(vector< vector<double> > marker_locations) {
-    set_marker_locations(marker_locations);
-}
-
-obstacle::get_marker_locations()
+Obstacle::Obstacle( const std::vector< std::vector<double> > &marker_locations )
 {
-    return marker_locations;
+    SetMarkerLocations(marker_locations);
+}
+Obstacle::~Obstacle() {
 }
 
-obstacle::set_marker_locations(vector<vector<double> > marker_locations)
+void Obstacle::SetMarkerLocations(const std::vector< std::vector<double> > &marker_locations)
 {
     this->marker_locations = marker_locations;
 }
 
-obstacle::~obstacle() {
+std::vector<std::vector<double> >* Obstacle::GetMarkerLocations()
+{
+    return &this->marker_locations;
 }
+
+
 

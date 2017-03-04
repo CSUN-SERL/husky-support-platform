@@ -8,17 +8,23 @@
 
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
-using namespace std;
-class obstacle 
+#include <vector>
+
+class Obstacle 
 {
 public:
-    obstacle();
-    obstacle(vector< vector<double> > marker_locations);
-    virtual ~obstacle();
-    set_marker_locations(vector< vector<double> > marker_locations);
-    get_marker_locations();
+    Obstacle();
+    
+    Obstacle( const std::vector< std::vector<double> > &marker_locations );
+    
+    virtual ~Obstacle();
+    
+    void SetMarkerLocations(const std::vector< std::vector<double> > &marker_locations);
+    
+    std::vector<std::vector<double> >* GetMarkerLocations();
+    
 private:
-    vector< vector<double> > marker_locations;
+    std::vector<std::vector<double> > marker_locations;
 
 };
 

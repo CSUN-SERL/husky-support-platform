@@ -8,23 +8,20 @@
 #include "obstacle.h"
 #include "path_planning.h"
 
-path_planning::path_planning() {
+using namespace std;
+PathPlanning::PathPlanning() {
 }
-/*Constructor with fields and returns path for vehicle.
+/*Constructor with fields 
  */
-path_planning::path_planning(vector<double> vehicle_location, vector<double> goal,
-        vector<obstacle> obstacle_list)
+PathPlanning::PathPlanning(const Point &vehicle_location, const Point &goal,
+        vector<Obstacle> obstacle_list)
 {
-    path_planning::set_vehicle_location(vehicle_location);
-    path_planning::set_goal(goal);
-    path_planning::set_obstacle_list(obstacle_list);
-    
-    vector< vector<double> > path = get_waypoints();
-    
-    return path;
+    PathPlanning::SetVehicleLocation(vehicle_location);
+    PathPlanning::SetGoal(goal);
+    PathPlanning::SetObstacleList(obstacle_list);
 }
 
-path_planning::~path_planning()
+PathPlanning::~PathPlanning()
 {
 }
 /*This should be a recursive function that finds the shortest path between the start
@@ -35,60 +32,60 @@ path_planning::~path_planning()
  * Result should be the minimum path from start to goal.
  * 
  */
-vector< vector<double> > path_planning::generate_min_path(vector<double> start,
-        vector<double> destination)
+vector< vector<double> >* PathPlanning::GenerateMinPath(const Point &start,
+        const Point &destination)
 {
     
 }
-//Returns true if there is no obstacle obstructing the path from start to destin.
-path_planning::is_path_clear(vector<double> start, vector<double> destination)
+//Returns closest obstacle obstructing path to goal
+Obstacle PathPlanning::IsPathClear(const Point &start, const Point &destination)
 {
-    return true;
+    return Obstacle();
 }
 //adds way point to list of final way points #this may be unnecessary
-path_planning::add_new_waypoint(vector<double> destination)
+void PathPlanning::AddNewWayPoint(std::vector<double> way_point)
 {
-    waypoints.insert(destination);
+    waypoints.push_back(way_point);
 }
 //returns way points 
-path_planning::get_waypoints()
-{
-    return waypoints;
-}
+
 //Sort obstacle list such that obstacles closest to curr_location are in front.
 //returns list sorted while removing irrelevant obstacles
-path_planning::sort_obstacle_list(vector<double> start, vector<double> destination,
-        vector<obstacle> obstacle_list)
+std::vector<Obstacle>* PathPlanning::SortObstacleList(const Point &start, const Point &destination,
+        vector<Obstacle> obstacle_list)
 {
     
 }
 
-path_planning::set_goal(vector<double> goal)
+void PathPlanning::SetVehicleLocation(const Point &vehicle_location)
+{
+    this->vehicle_location = vehicle_location;
+}
+    
+PathPlanning::Point PathPlanning::GetVehicleLocation()
+{
+    return this->vehicle_location;
+}
+
+void PathPlanning::SetGoal(const Point &goal)
 {
     this->goal = goal;
 }
 
-path_planning::set_obstacle_list(vector<obstacle> obstacles)
-{
-    this->obstacle_list = obstacles;
-}
-
-path_planning::set_vehicle_location(vector<double> vehicle_location)
-{
-    this->vehicle_location = vehicle_location;
-}
-
-path_planning::get_goal()
+PathPlanning::Point PathPlanning::GetGoal()
 {
     return this->goal;
 }
 
-path_planning::get_obstacle_list()
-{
-    return this->obstacle_list;
+void PathPlanning::SetObstacleList(std::vector<Obstacle> obstacles){
+    this->obstacle_list = obstacles;
 }
 
-path_planning::get_vehicle_location()
+std::vector<Obstacle>* PathPlanning::GetObstacleList()
 {
-    return this->vehicle_location;
+    return &this->obstacle_list;
+}
+    std::vector< std::vector<double> >* PathPlanning::GetWayPoints()
+{
+    return &waypoints;
 }

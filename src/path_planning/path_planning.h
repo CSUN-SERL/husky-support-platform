@@ -10,40 +10,54 @@
 
 #ifndef PATH_PLANNING_H
 #define PATH_PLANNING_H
+#include <vector>
 
-using namespace std;
-class path_planning {
+class PathPlanning{
 public:
-    path_planning();
-    vector< vector<double> > path_planning(vector<double> start,
-    vector<double> goal, vector<obstacle> obstacle_list);
-    virtual ~path_planning();
-    vector< vector<double> > waypoints;
+    struct Point
+    {
+        double x;
+        double y;
+    };
+    PathPlanning();
     
-    set_vehicle_location(vector<double> vehicle_location);
-    vector<double> get_vehicle_location();
+    PathPlanning(const Point & start, const Point & goal,
+        std::vector<Obstacle> obstacle_list);
     
-    set_goal(vector<double> goal);
-    vector<double> get_goal();
+    virtual ~PathPlanning();
     
-    set_obstacle_list(vector<obstacle> obstacles);
-    vector<obstacle> get_obstacle_list();
+    std::vector< std::vector<double> > waypoints;
+    
+    void SetVehicleLocation(const Point &vehicle_location);
+    
+    Point GetVehicleLocation();
+    
+    void SetGoal(const Point & goal);
+    
+    Point GetGoal();
+    
+    void SetObstacleList(std::vector<Obstacle> obstacles);
+    
+    std::vector<Obstacle>* GetObstacleList();
+
 private:
-    vector<double> goal,
-            vehicle_location;
-    vector<obstacle> obstacle_list;
+
     
-    vector< vector<double> > generate_min_path(vector<double> start,
-    vector<double> destination);
+    Point goal,
+          vehicle_location;
+    std::vector<Obstacle> obstacle_list;
     
-    vector<obstacle> sort_obstacle_list(vector<double> start,
-    vector<double> destination,vector<obstacle> obstacle_list);
+    std::vector< std::vector<double> >* GenerateMinPath(const Point & start,
+        const Point & destination);
     
-    bool is_path_clear(vector<double> start, vector<double> destination);
+    std::vector<Obstacle>* SortObstacleList(const Point & start,
+        const Point & destination,std::vector<Obstacle> obstacle_list);
     
-    add_new_waypoint(vector<double> destination);
+    Obstacle IsPathClear(const Point & start, const Point & destination);
     
-    vector< vector<double> > get_waypoints();
+    void AddNewWayPoint(std::vector<double> way_point);
+    
+    std::vector< std::vector<double> >* GetWayPoints();
 
 };
 
