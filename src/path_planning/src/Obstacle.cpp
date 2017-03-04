@@ -6,7 +6,7 @@
  * Created on March 2, 2017, 1:47 PM
  */
 
-#include "obstacle.h"
+#include "Obstacle.h"
 #include <vector>
 
 Obstacle::Obstacle() {

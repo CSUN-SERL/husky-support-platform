@@ -6,7 +6,7 @@
  * Created on March 2, 2017, 1:23 PM
  */
 
-#include "obstacle.h"
+#include "Obstacle.h"
 
 #ifndef PATH_PLANNING_H
 #define PATH_PLANNING_H

@@ -5,8 +5,8 @@
  * 
  * Created on March 2, 2017, 1:23 PM
  */
-#include "obstacle.h"
-#include "path_planning.h"
+#include "Obstacle.h"
+#include "PathPlanning.h"
 
 using namespace std;
 PathPlanning::PathPlanning() {
