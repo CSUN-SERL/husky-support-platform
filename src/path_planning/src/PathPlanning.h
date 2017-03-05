@@ -26,7 +26,8 @@ public:
     
     virtual ~PathPlanning();
     
-    std::vector< std::vector<double> > waypoints;
+    std::vector< std::vector<double> >* GenerateMinPath(const Point & start,
+        const Point & destination);
     
     void SetVehicleLocation(const Point &vehicle_location);
     
@@ -42,18 +43,15 @@ public:
 
 private:
 
+    std::vector< std::vector<double> > waypoints;
     
     Point goal,
           vehicle_location;
     std::vector<Obstacle> obstacle_list;
     
-    std::vector< std::vector<double> >* GenerateMinPath(const Point & start,
-        const Point & destination);
-    
     std::vector<Obstacle>* SortObstacleList(const Point & start,
         const Point & destination,std::vector<Obstacle> obstacle_list);
     
-    Obstacle IsPathClear(const Point & start, const Point & destination);
     
     void AddNewWayPoint(std::vector<double> way_point);
     

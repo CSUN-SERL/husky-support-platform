@@ -26,5 +26,6 @@ catkin_package(
  add_library(${PROJECT_NAME}
    src/Obstacle.cpp
    src/PathPlanning.cpp
+   src/Path.cpp
  )
 

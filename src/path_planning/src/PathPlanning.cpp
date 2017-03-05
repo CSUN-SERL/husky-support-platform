@@ -37,11 +37,7 @@ vector< vector<double> >* PathPlanning::GenerateMinPath(const Point &start,
 {
     
 }
-//Returns closest obstacle obstructing path to goal
-Obstacle PathPlanning::IsPathClear(const Point &start, const Point &destination)
-{
-    return Obstacle();
-}
+
 //adds way point to list of final way points #this may be unnecessary
 void PathPlanning::AddNewWayPoint(std::vector<double> way_point)
 {
@@ -85,7 +81,8 @@ std::vector<Obstacle>* PathPlanning::GetObstacleList()
 {
     return &this->obstacle_list;
 }
-    std::vector< std::vector<double> >* PathPlanning::GetWayPoints()
+
+std::vector< std::vector<double> >* PathPlanning::GetWayPoints()
 {
     return &waypoints;
 }

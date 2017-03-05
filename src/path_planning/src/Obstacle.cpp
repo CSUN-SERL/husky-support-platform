@@ -12,19 +12,19 @@
 Obstacle::Obstacle() {
 }
 
-Obstacle::Obstacle( const std::vector< std::vector<double> > &marker_locations )
+Obstacle::Obstacle( const std::vector< Point > &marker_locations )
 {
     SetMarkerLocations(marker_locations);
 }
 Obstacle::~Obstacle() {
 }
 
-void Obstacle::SetMarkerLocations(const std::vector< std::vector<double> > &marker_locations)
+void Obstacle::SetMarkerLocations(const std::vector< Point > &marker_locations)
 {
     this->marker_locations = marker_locations;
 }
 
-std::vector<std::vector<double> >* Obstacle::GetMarkerLocations()
+std::vector< Obstacle::Point >* Obstacle::GetMarkerLocations()
 {
     return &this->marker_locations;
 }

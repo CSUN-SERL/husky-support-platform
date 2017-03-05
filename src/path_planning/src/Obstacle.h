@@ -13,18 +13,23 @@
 class Obstacle 
 {
 public:
+    struct Point
+    {
+        double x;
+        double y;
+    };
     Obstacle();
     
-    Obstacle( const std::vector< std::vector<double> > &marker_locations );
+    Obstacle( const std::vector< Point > &marker_locations );
     
     virtual ~Obstacle();
     
-    void SetMarkerLocations(const std::vector< std::vector<double> > &marker_locations);
+    void SetMarkerLocations(const std::vector< Point > &marker_locations);
     
-    std::vector<std::vector<double> >* GetMarkerLocations();
+    std::vector< Point >* GetMarkerLocations();
     
 private:
-    std::vector<std::vector<double> > marker_locations;
+    std::vector< Point > marker_locations;
 
 };
 
