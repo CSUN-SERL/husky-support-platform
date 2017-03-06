@@ -33,6 +33,11 @@ PathPlanning::PathPlanning(const Path::Point &vehicle_location, const Path::Poin
 PathPlanning::~PathPlanning()
 {
 }
+
+PathPlanning::Waypoints PathPlanning::GenerateMinPath(){
+    PathPlanning::Waypoints points;
+    points = GenerateMinPath(vehicle_location,goal);
+}
 /*This should be a recursive function that finds the shortest path between the start
  *and goal. Calls itself whenever an obstacle appears, with new goal being 
  * an edge of the furthest obstacle in the way. Add way points to list as we

@@ -31,8 +31,7 @@ public:
     
     bool PointsAreEqual(const Path::Point& a, const Path::Point& b);
     
-    Waypoints GenerateMinPath(Path::Point start,
-        Path::Point destination);
+    Waypoints GenerateMinPath();
     
     void MergeWaypoints(Waypoints a, Waypoints b);
     
@@ -61,6 +60,9 @@ private:
     
     std::vector<Obstacle> SortObstacleList(const Path::Point & start,
         std::vector<Obstacle> obstacle_list);
+    
+    Waypoints GenerateMinPath(Path::Point start,
+        Path::Point destination);
     
     static bool CompareX (Obstacle a,  Obstacle b);
     static bool CompareY (Obstacle a, Obstacle b);

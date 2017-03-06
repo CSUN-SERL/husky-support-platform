@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
     
     PathPlanning PathGen(start,goal,obstacle_list);
     
-    PathPlanning::Waypoints list = PathGen.GenerateMinPath(start,goal);
+    PathPlanning::Waypoints list = PathGen.GenerateMinPath();
     
     printf("%f", list.total_distance);
     return 0;
