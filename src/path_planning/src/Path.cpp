@@ -13,7 +13,7 @@ Path::Path()
 {
     
 }
-Path::Path(int width_of_vehicle)
+Path::Path(double width_of_vehicle)
 {
     Path::SetVehicleDimension(width_of_vehicle);
 }
@@ -66,7 +66,8 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
     std::vector<Obstacle> reduced_list;
     
     //Iterate through markers in obstacle list checking for which values fall in plane
-    for(Obstacle auto &obstacle : obstacle_list){
+    
+    /*for(Obstacle auto &obstacle : obstacle_list){
         for(Obstacle::Marker auto &marker : obstacle.GetMarkerLocations()){
             if(marker.x < vehicle_plane.min_x || marker.x > vehicle_plane.max_x ||
                     marker.y < vehicle_plane.min_y || marker.y > vehicle_plane.max_y)
@@ -80,7 +81,24 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
             }
             
         }
+    }*/
+    for(std::vector<Obstacle>::iterator it = obstacle_list.begin(); it < obstacle_list.end(); it++){
+        for(std::vector<Obstacle::Marker>::iterator marker = it->GetMarkerLocations()->begin();
+                marker < it->GetMarkerLocations()->end(); marker++){
+            if(marker->x < vehicle_plane.min_x || marker->x > vehicle_plane.max_x ||
+                    marker->y < vehicle_plane.min_y || marker->y > vehicle_plane.max_y)
+            ; //Marker not in plane do nothing
+            else //Marker does exist within plane
+            {
+                //if marker exists within range add to obstacle list to check
+                reduced_list.push_back(*it);
+                //move to next object
+                break;
+            }
+            
+        }
     }
+    return reduced_list;
 }
 /*Determines if an object_marker exists in the plane defined by:
  * vehicle_size, start, end
@@ -88,6 +106,11 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
  */
 Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point start, Path::Point goal)
 {
+    if(obstacle_list.empty())
+    {
+        std::vector<Obstacle::Marker> empty;
+        return Obstacle({0,0}, empty);
+    }
     Obstacle closest_obstacle;
     
     Obstacle furthest_obstacle;
@@ -99,7 +122,7 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
     
     Path::Point top_left = {goal.x - (vehicle_dimension)/2, goal.y};
     Path::Point top_right = {goal.x + (vehicle_dimension)/2, goal.y};
-    Path::Point bottom_left = {start.x + (vehicle_dimension)/2, start.y};
+    Path::Point bottom_left = {start.x - (vehicle_dimension)/2, start.y};
     Path::Point bottom_right = {start.x + (vehicle_dimension)/2, start.y};
     
     Point vertices[] = {top_left,top_right,bottom_left,bottom_right};
@@ -108,7 +131,7 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
     
     //List returned is in order from furthest to closest
     std::vector<Obstacle> reduced_list = Path::ReduceObstacleList(obstacle_list, vehicle_plane);
-    for(Obstacle auto &obstacle : reduced_list){
+/*    for(Obstacle auto &obstacle : reduced_list){
         for(Obstacle::Marker auto &marker : obstacle.GetMarkerLocations()){
             int array_length = sizeof(vertices) / sizeof(vertices);
             bool inside = false;
@@ -122,24 +145,52 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
                 }
             }
             if(inside){
-                /*//whenever obstacle is found reset closest_obstacle because list is in reverse order
+                //whenever obstacle is found reset closest_obstacle because list is in reverse order
                 //closest_obstacle = obstacle;               
                 //move on to next obstacle
                 break;
-                 */
+                 
                 //return furthest obstacle from start as opposed to closest.
                 obstacle.SetCorner(marker);
                 furthest_obstacle = obstacle;
                 return furthest_obstacle;
             }
         }
-    }
+ *    }
+     */
     
+    for(std::vector<Obstacle>::iterator it = reduced_list.begin(); it < reduced_list.end(); it++){
+        for(std::vector<Obstacle::Marker>::iterator marker = it->GetMarkerLocations()->begin();
+                marker < it->GetMarkerLocations()->end(); marker++){
+            int array_length = sizeof(vertices) / sizeof(vertices);
+            bool inside = false;
+            for (int i = 0, j = array_length-1; i < array_length; j = i++)
+            {
+                if ( ((vertices[i].y>marker->y) != (vertices[j].y>marker->y)) &&
+                  (marker->x < (vertices[j].x-vertices[i].x) * (marker->y-vertices[i].y) /
+                    (vertices[j].y-vertices[i].y) + vertices[i].x) )
+                {
+                    inside = !inside;
+                }
+            }
+            if(inside){
+                //whenever obstacle is found reset closest_obstacle because list is in reverse order
+                //closest_obstacle = obstacle;               
+                //move on to next obstacle
+                //break;
+                 
+                //return furthest obstacle from start as opposed to closest.
+                it->SetCorner(*marker);
+                furthest_obstacle = *it;
+                return furthest_obstacle;
+            }
+        }
+    }
     
     return closest_obstacle;
 }
 
-void Path::SetVehicleDimension(int size)
+void Path::SetVehicleDimension(double size)
 {
     this->vehicle_dimension = size;
 }

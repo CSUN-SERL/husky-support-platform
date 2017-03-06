@@ -33,7 +33,7 @@ public:
         double max_y;
     };
     Path();
-    Path(int width_of_vehicle);
+    Path(double width_of_vehicle);
     virtual ~Path();
     
     //Calculates Distance between two points
@@ -57,7 +57,7 @@ public:
     Obstacle PointInPlane(std::vector<Obstacle> obstacle_list, Point start, Point goal);
     
     
-    void SetVehicleDimension(int size);
+    void SetVehicleDimension(double size);
     
     
 private:

@@ -67,7 +67,7 @@ private:
     static bool CompareX (Obstacle a,  Obstacle b);
     static bool CompareY (Obstacle a, Obstacle b);
     
-    void AddNewWayPoint(Waypoints list_of_points, Path::Point way_point);
+    void AddNewWayPoint(Waypoints &list_of_points, Path::Point way_point);
     
     std::vector< Path::Point >* GetWayPoints();
 

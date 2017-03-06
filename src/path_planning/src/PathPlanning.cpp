@@ -24,7 +24,6 @@ PathPlanning::PathPlanning() {
 PathPlanning::PathPlanning(const Path::Point &vehicle_location, const Path::Point &goal,
         vector<Obstacle> obstacle_list)
 {
-    printf("hello world");
     PathPlanning::SetVehicleLocation(vehicle_location);
     PathPlanning::SetGoal(goal);
     PathPlanning::SetObstacleList(obstacle_list);
@@ -37,6 +36,7 @@ PathPlanning::~PathPlanning()
 PathPlanning::Waypoints PathPlanning::GenerateMinPath(){
     PathPlanning::Waypoints points;
     points = GenerateMinPath(vehicle_location,goal);
+    return points;
 }
 /*This should be a recursive function that finds the shortest path between the start
  *and goal. Calls itself whenever an obstacle appears, with new goal being 
@@ -50,14 +50,14 @@ PathPlanning::Waypoints PathPlanning::GenerateMinPath(Path::Point start,
         Path::Point destination)
 {
     Path::Point cur_location = start;
-    Path current_path = Path();
+    Path current_path = Path(2.5);
     
     std::vector<Obstacle> sorted_list(obstacle_list);
     sorted_list = SortObstacleList(start, sorted_list);
     
-    PathPlanning::Waypoints points;
-    printf("hello world2");
-    while(!PointsAreEqual(cur_location, destination))
+    PathPlanning::Waypoints points = {{},0.0,0};
+
+    while(PointsAreEqual(cur_location, destination) == false)
     {
         //returns obstacle closest to goal
         Obstacle object_in_path = current_path.PointInPlane(sorted_list, cur_location, destination);
@@ -74,7 +74,7 @@ PathPlanning::Waypoints PathPlanning::GenerateMinPath(Path::Point start,
             cur_location = intermediate_goal;
         }
     }
-    delete &current_path;
+    //delete &current_path;
     return points;
 }
 // Merge two lists of waypoints where a becomes a U b
@@ -87,12 +87,15 @@ void PathPlanning::MergeWaypoints(Waypoints a, Waypoints b)
 
 bool PathPlanning::PointsAreEqual(const Path::Point& a, const Path::Point& b)
 {
-    return ((a.x == b.x) && (a.y == b.y));
+    if((a.x == b.x) && (a.y == b.y))
+            return true;
+    return false;
 }
 
 //Makes the greedy choice to navigate around obstacle. Picks Marker_FS with preference to goal.
 Path::Point PathPlanning::ChooseGreedyPathAround(Path::Point cur_location, Obstacle object, Path::Point destination)
 {
+    object.InitializeFreeSpaces(2.5);
     Obstacle::Marker navigate_around = object.GetCorner();
     //Find free space with the closest average distance from start and goal.
     double min_distance = Path::AverageDistance(cur_location, destination, navigate_around.FS_bottom);
@@ -112,7 +115,7 @@ Path::Point PathPlanning::ChooseGreedyPathAround(Path::Point cur_location, Obsta
 }
 
 //adds way point to list  way points #this may be unnecessary
-void PathPlanning::AddNewWayPoint(Waypoints list_of_points, Path::Point way_point)
+void PathPlanning::AddNewWayPoint(Waypoints &list_of_points, Path::Point way_point)
 {
     if(list_of_points.number_of_points != 0)
     {
