@@ -27,5 +27,8 @@ catkin_package(
    src/Obstacle.cpp
    src/PathPlanning.cpp
    src/Path.cpp
+   src/driver.cpp
  )
+ add_executable(driver src/driver.cpp)
+target_link_libraries(driver ${catkin_LIBRARIES} ${PROJECT_NAME})
 

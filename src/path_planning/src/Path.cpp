@@ -59,7 +59,7 @@ double Path::CalcSlope(Path::Point a, Path::Point b)
 //returns reduced obstacle list with obstacle furthest from vehicle first.
 //If object doesnt have a marker within the min - max x/y values it can't be in the way
 //so we eliminate it from the list of obstacles to check.
-std::vector <Obstacle> ReduceObstacleList(std::vector<Obstacle> obstacle_list,
+std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_list,
         Path::Plane vehicle_plane)
 {
     //initialize new list of obstacles
@@ -67,7 +67,7 @@ std::vector <Obstacle> ReduceObstacleList(std::vector<Obstacle> obstacle_list,
     
     //Iterate through markers in obstacle list checking for which values fall in plane
     for(Obstacle auto &obstacle : obstacle_list){
-        for(Path::Point auto &marker : obstacle.GetMarkerLocations()){
+        for(Obstacle::Marker auto &marker : obstacle.GetMarkerLocations()){
             if(marker.x < vehicle_plane.min_x || marker.x > vehicle_plane.max_x ||
                     marker.y < vehicle_plane.min_y || marker.y > vehicle_plane.max_y)
             ; //Marker not in plane do nothing
@@ -89,6 +89,9 @@ std::vector <Obstacle> ReduceObstacleList(std::vector<Obstacle> obstacle_list,
 Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point start, Path::Point goal)
 {
     Obstacle closest_obstacle;
+    
+    Obstacle furthest_obstacle;
+    
     double minX = start.x < goal.x ? start.x - (vehicle_dimension)/2: goal.x -(vehicle_dimension)/2;
     double maxX = start.x > goal.x ? start.x + (vehicle_dimension)/2: goal.x +(vehicle_dimension)/2;
     double minY = start.y;
@@ -106,7 +109,7 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
     //List returned is in order from furthest to closest
     std::vector<Obstacle> reduced_list = Path::ReduceObstacleList(obstacle_list, vehicle_plane);
     for(Obstacle auto &obstacle : reduced_list){
-        for(Path::Point auto &marker : obstacle.GetMarkerLocations()){
+        for(Obstacle::Marker auto &marker : obstacle.GetMarkerLocations()){
             int array_length = sizeof(vertices) / sizeof(vertices);
             bool inside = false;
             for (int i = 0, j = array_length-1; i < array_length; j = i++)
@@ -119,10 +122,15 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
                 }
             }
             if(inside){
-                //whenever obstacle is found reset closest_obstacle because list is in reverse order
-                closest_obstacle = obstacle;
+                /*//whenever obstacle is found reset closest_obstacle because list is in reverse order
+                //closest_obstacle = obstacle;               
                 //move on to next obstacle
                 break;
+                 */
+                //return furthest obstacle from start as opposed to closest.
+                obstacle.SetCorner(marker);
+                furthest_obstacle = obstacle;
+                return furthest_obstacle;
             }
         }
     }

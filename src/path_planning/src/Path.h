@@ -13,7 +13,9 @@
 
 #ifndef PATH_H
 #define PATH_H
-#include "Obstacle.h"
+#include <vector>
+
+class Obstacle;
 
 class Path
 {
@@ -35,13 +37,13 @@ public:
     virtual ~Path();
     
     //Calculates Distance between two points
-    double CalcDistBetweenPoints(Point a, Point b);
+    static double CalcDistBetweenPoints(Point a, Point b);
     
     /*Calculates distance between curLocation and intermediateGoal and
      * the distance between intermediateGoal and endGoal
      * then averages the two values
      */
-    double AverageDistance(Point start, Point end_goal, Point inter_goal);
+    static double AverageDistance(Point start, Point end_goal, Point inter_goal);
     
     //returns reduced obstacle list
     //If object doesnt have a marker within the min - max x/y values it can't be in the way
@@ -59,7 +61,7 @@ public:
     
     
 private:
-    int vehicle_dimension; //vehicle will be defined as a square for now
+    double vehicle_dimension; //vehicle will be defined as a square for now
     
     //Calculates slope given two points
     double CalcSlope(Point a, Point b);

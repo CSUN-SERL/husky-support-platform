@@ -7,55 +7,67 @@
  */
 
 #include "Obstacle.h"
-
+#include "Path.h"
 #ifndef PATH_PLANNING_H
 #define PATH_PLANNING_H
 #include <vector>
 
 class PathPlanning{
 public:
-    struct Point
+    static Path::Point goal,
+          vehicle_location;
+    struct Waypoints
     {
-        double x;
-        double y;
+        std::vector<Path::Point> vector;
+        double total_distance;
+        int number_of_points;
     };
     PathPlanning();
     
-    PathPlanning(const Point & start, const Point & goal,
+    PathPlanning(const Path::Point & start, const Path::Point & goal,
         std::vector<Obstacle> obstacle_list);
     
     virtual ~PathPlanning();
     
-    std::vector< std::vector<double> >* GenerateMinPath(const Point & start,
-        const Point & destination);
+    bool PointsAreEqual(const Path::Point& a, const Path::Point& b);
     
-    void SetVehicleLocation(const Point &vehicle_location);
+    Waypoints GenerateMinPath(Path::Point start,
+        Path::Point destination);
     
-    Point GetVehicleLocation();
+    void MergeWaypoints(Waypoints a, Waypoints b);
     
-    void SetGoal(const Point & goal);
+    Path::Point ChooseGreedyPathAround(Path::Point cur_location, Obstacle object,
+        Path::Point destination);
     
-    Point GetGoal();
+    void SetVehicleLocation(const Path::Point &vehicle_location);
+    
+    Path::Point GetVehicleLocation();
+    
+    void SetGoal(const Path::Point & goal);
+    
+    Path::Point GetGoal();
     
     void SetObstacleList(std::vector<Obstacle> obstacles);
     
     std::vector<Obstacle>* GetObstacleList();
+    
 
 private:
 
-    std::vector< std::vector<double> > waypoints;
+    std::vector< Path::Point > waypoints;
     
-    Point goal,
-          vehicle_location;
+
     std::vector<Obstacle> obstacle_list;
     
-    std::vector<Obstacle>* SortObstacleList(const Point & start,
-        const Point & destination,std::vector<Obstacle> obstacle_list);
+    std::vector<Obstacle> SortObstacleList(const Path::Point & start,
+        std::vector<Obstacle> obstacle_list);
     
+    static bool CompareX (Obstacle a,  Obstacle b);
+    static bool CompareY (Obstacle a, Obstacle b);
     
-    void AddNewWayPoint(std::vector<double> way_point);
+    void AddNewWayPoint(Waypoints list_of_points, Path::Point way_point);
     
-    std::vector< std::vector<double> >* GetWayPoints();
+    std::vector< Path::Point >* GetWayPoints();
 
 };
 
