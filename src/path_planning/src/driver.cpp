@@ -33,10 +33,10 @@ int main(int argc, char** argv) {
     Obstacle::Marker marker2;
     Obstacle::Marker marker3;
     Obstacle::Marker marker4;
-    marker1.x = 1.0; marker1.y = 1.0;
-    marker2.x = 3.0; marker2.y = 1.0;
-    marker3.x = 1.0; marker3.y = 4.0;
-    marker4.x = 3.0; marker4.y = 4.0;
+    marker1.x = 2.0; marker1.y = 1.0;
+    marker2.x = 4.0; marker2.y = 1.0;
+    marker3.x = 2.0; marker3.y = 4.0;
+    marker4.x = 4.0; marker4.y = 4.0;
     
     std::vector<Obstacle::Marker> marker_list;
     marker_list.push_back(marker1);

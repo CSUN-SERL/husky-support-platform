@@ -166,9 +166,9 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
             bool inside = false;
             for (int i = 0, j = array_length-1; i < array_length; j = i++)
             {
-                if ( ((vertices[i].y>marker->y) != (vertices[j].y>marker->y)) &&
-                  (marker->x < (vertices[j].x-vertices[i].x) * (marker->y-vertices[i].y) /
-                    (vertices[j].y-vertices[i].y) + vertices[i].x) )
+                if ( ((vertices[i].y > marker->y) != (vertices[j].y > marker->y)) &&
+                  (marker->x < (((vertices[j].x-vertices[i].x) * (marker->y-vertices[i].y) /
+                    (vertices[j].y-vertices[i].y)) + vertices[i].x)) )
                 {
                     inside = !inside;
                 }
