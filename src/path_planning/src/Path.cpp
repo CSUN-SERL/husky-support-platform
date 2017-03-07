@@ -120,10 +120,10 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
     double minY = start.y;
     double maxY = goal.y;
     
-    Path::Point top_left = {goal.x - (vehicle_dimension)/2, goal.y};
-    Path::Point top_right = {goal.x + (vehicle_dimension)/2, goal.y};
-    Path::Point bottom_left = {start.x - (vehicle_dimension)/2, start.y};
-    Path::Point bottom_right = {start.x + (vehicle_dimension)/2, start.y};
+    Path::Point top_left = {goal.x - (vehicle_dimension)/2, goal.y + (vehicle_dimension)/2};
+    Path::Point top_right = {goal.x + (vehicle_dimension)/2, goal.y + (vehicle_dimension)/2};
+    Path::Point bottom_left = {start.x - (vehicle_dimension)/2, start.y - (vehicle_dimension)/2};
+    Path::Point bottom_right = {start.x + (vehicle_dimension)/2, start.y - (vehicle_dimension)/2};
     
     Point vertices[] = {top_left,top_right,bottom_left,bottom_right};
     
@@ -162,7 +162,7 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
     for(std::vector<Obstacle::Obstacle>::iterator it = reduced_list.begin(); it < reduced_list.end(); it++){
         for(std::vector<Obstacle::Marker>::iterator marker = it->GetMarkerLocations()->begin();
                 marker < it->GetMarkerLocations()->end(); marker++){
-            int array_length = sizeof(vertices) / sizeof(vertices);
+            int array_length = sizeof(vertices) / sizeof(vertices[0]);
             bool inside = false;
             for (int i = 0, j = array_length-1; i < array_length; j = i++)
             {
