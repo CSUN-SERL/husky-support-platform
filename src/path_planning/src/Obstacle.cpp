@@ -29,27 +29,30 @@ bool Obstacle::IsEmpty()
 
 void Obstacle::InitializeFreeSpaces(double vehicle_dimension)
 {
-    for(Obstacle::Marker auto &marker : this->marker_locations){
-        marker.FS_bottom.y = marker.y - (vehicle_dimension/2 + (vehicle_dimension * .15));
-        marker.FS_bottom.x = marker.x;
-        CheckInvalidMarker(marker.FS_bottom);
+    for(std::vector<Obstacle::Marker>::iterator marker = this->GetMarkerLocations()->begin();
+                marker < this->GetMarkerLocations()->end(); marker++)
+    {
+    //for(Obstacle::Marker auto &marker : this->marker_locations){
+        marker->FS_bottom.y = marker->y - (vehicle_dimension/2 + (vehicle_dimension * .15));
+        marker->FS_bottom.x = marker->x;
+        CheckInvalidMarker(marker->FS_bottom);
         
-        marker.FS_top.y = marker.y + (vehicle_dimension/2 + (vehicle_dimension * .15));
-        marker.FS_top.x = marker.x;
-        CheckInvalidMarker(marker.FS_top);
+        marker->FS_top.y = marker->y + (vehicle_dimension/2 + (vehicle_dimension * .15));
+        marker->FS_top.x = marker->x;
+        CheckInvalidMarker(marker->FS_top);
         
-        marker.FS_right.y = marker.y;
-        marker.FS_right.x = marker.x + (vehicle_dimension/2 + (vehicle_dimension * .15));
-        CheckInvalidMarker(marker.FS_right);
+        marker->FS_right.y = marker->y;
+        marker->FS_right.x = marker->x + (vehicle_dimension/2 + (vehicle_dimension * .15));
+        CheckInvalidMarker(marker->FS_right);
         
-        marker.FS_left.y = marker.y;
-        marker.FS_left.x = marker.x - (vehicle_dimension/2 + (vehicle_dimension * .15));
-        CheckInvalidMarker(marker.FS_left);
+        marker->FS_left.y = marker->y;
+        marker->FS_left.x = marker->x - (vehicle_dimension/2 + (vehicle_dimension * .15));
+        CheckInvalidMarker(marker->FS_left);
 
     }
 }
 
-void Obstacle::CheckInvalidMarker(Path::Point point)
+void Obstacle::CheckInvalidMarker(Path::Point &point)
 {
     int i, j;
     bool exists;

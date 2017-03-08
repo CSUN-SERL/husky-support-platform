@@ -42,7 +42,7 @@ public:
     
     void InitializeFreeSpaces(double vehicle_dimension);
     
-    void CheckInvalidMarker(Path::Point point);
+    void CheckInvalidMarker(Path::Point &point);
     
     Path::Point GetMidpoint();
     

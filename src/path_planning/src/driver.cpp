@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
     
     start.x = 0.0;
     start.y = 0.0;
-    goal.x = 10.0;
+    goal.x = 6.0;
     goal.y = 5.0;
     Obstacle obstacle1 = Obstacle(midpoint, marker_list);
     vector<Obstacle> obstacle_list;
