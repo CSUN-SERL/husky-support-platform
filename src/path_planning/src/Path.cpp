@@ -86,9 +86,11 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
     return reduced_list;
 }
 
-Obstacle Path::PlaneIntersection(std::vector<Obstacle> obstacle_list, Path::Plane vehicle_plane)
+bool Path::PlaneIntersection(Path::Plane obstacle_plane, Path::Plane vehicle_plane)
 {
-    
+    if(obstacle_plane.min_x < vehicle_plane.max_x && obstacle_plane.max_x > vehicle_plane.min_x
+            && obstacle_plane.min_y < vehicle_plane.max_y && obstacle_plane.max_y > vehicle_plane.min_y )
+        return true;
 }
 /*Determines if an object_marker exists in the plane defined by:
  * vehicle_size, start, end
