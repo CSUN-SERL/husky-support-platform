@@ -28,7 +28,7 @@ double Path::CalcDistBetweenPoints(Path::Point a, Path::Point b)
   int distancex = (b.x - a.x) * (b.x - a.x);
   int distancey = (b.y - a.y) * (b.y - a.y);
 
-  double distance = sqrt (distancex - distancey);
+  double distance = sqrt(distancex - distancey);
   
   return distance;
 }
@@ -84,6 +84,11 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
         }
     }
     return reduced_list;
+}
+
+Obstacle Path::PlaneIntersection(std::vector<Obstacle> obstacle_list, Path::Plane vehicle_plane)
+{
+    
 }
 /*Determines if an object_marker exists in the plane defined by:
  * vehicle_size, start, end

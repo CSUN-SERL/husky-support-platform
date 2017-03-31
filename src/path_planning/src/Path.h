@@ -63,6 +63,9 @@ public:
 private:
     double vehicle_dimension; //vehicle will be defined as a square for now
     
+    //returns Obstacle if it intersects with vehicle plane.
+    Obstacle PlaneIntersection(std::vector<Obstacle> obstacle_list, Plane vehicle_plane);
+    
     //Calculates slope given two points
     double CalcSlope(Point a, Point b);
 
