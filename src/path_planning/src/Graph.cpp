@@ -45,7 +45,8 @@ Graph::Graph(int V)
 void Graph::addEdge(int v, int w, double distance)
 {
     adj[v].push_back(neighbor(w, distance)); // Add w to v’s list.
-    //addEdge(w,v,distance);
+    //add v to w's list so it is bidirectional.
+    adj[w].push_back(neighbor(v, distance));
 }
 
 void Graph::DijkstraComputePaths(vertex_t source,

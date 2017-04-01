@@ -15,6 +15,7 @@
 
 using namespace std;
 double vehicle_width = 2.5;
+std::vector<Path::Point> nodes;
 Path::Point PathPlanning::goal;
 Path::Point PathPlanning::vehicle_location;
 
@@ -36,8 +37,23 @@ PathPlanning::~PathPlanning()
 
 PathPlanning::Waypoints PathPlanning::GenerateMinPath(){
     PathPlanning::Waypoints points;
+    
     Graph graph = PathPlanning::GenerateGraph();
-    points = GenerateMinPath(vehicle_location,goal);
+    
+    std::vector<weight_t> min_distance;
+    std::vector<vertex_t> previous;    
+    graph.DijkstraComputePaths(0,  min_distance, previous);
+    
+    std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(1, previous);
+    
+    //total distance to destination. distance = 0 if not reachable
+    points.total_distance = min_distance[1];
+    points.number_of_points = path.size();
+    //retrieve waypoints from shortest path
+    for(std::list<vertex_t>::const_iterator iterator = path.begin(), end = path.end(); iterator != end; ++iterator){
+        points.vector.push_back(nodes.at(*iterator));
+    }
+    
     return points;
 }
 
@@ -45,7 +61,8 @@ Graph PathPlanning::GenerateGraph()
 {
     int number_of_nodes = 2; //by default we have start and finish nodes
     //Calculate rest of nodes by totaling number of markers
-    std::vector<Path::Point> nodes;
+    
+    Path graph_path = Path(vehicle_width);
     nodes.push_back(vehicle_location);
     nodes.push_back(goal);
     for(std::vector<Obstacle>::iterator it = obstacle_list.begin(); it < obstacle_list.end(); it++){
@@ -63,8 +80,18 @@ Graph PathPlanning::GenerateGraph()
    
    //iterate through each node and check for path to other nodes if path exists;
     //add edges to graph
+   for(int i = 0; i < nodes.size()-1; i++){
+       for(int j = 1; j < nodes.size(); j++){
+           if(graph_path.EdgeExists(obstacle_list, nodes.at(i), nodes.at(j))){
+               graph.addEdge(i,j,Path::CalcDistBetweenPoints(nodes.at(i),nodes.at(j)));
+           }
+       }
+   }
+   
+   return graph;
 }
-/*This should be a recursive function that finds the shortest path between the start
+/*DEPRECATED 
+ * This should be a recursive function that finds the shortest path between the start
  *and goal. Calls itself whenever an obstacle appears, with new goal being 
  * an edge of the furthest obstacle in the way. Add way points to list as we
  * determine the shortest path. will be added from the end to the beginning.
@@ -118,6 +145,7 @@ bool PathPlanning::PointsAreEqual(const Path::Point& a, const Path::Point& b)
     return false;
 }
 
+//DEPRECATED:
 //Makes the greedy choice to navigate around obstacle. Picks Marker_FS with preference to goal.
 Path::Point PathPlanning::ChooseGreedyPathAround(Path::Point cur_location, Obstacle object, Path::Point destination)
 {
