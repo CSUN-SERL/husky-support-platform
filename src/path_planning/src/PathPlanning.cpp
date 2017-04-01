@@ -14,7 +14,7 @@
 #include <Graph.h>
 
 using namespace std;
-
+double vehicle_width = 2.5;
 Path::Point PathPlanning::goal;
 Path::Point PathPlanning::vehicle_location;
 
@@ -45,14 +45,24 @@ Graph PathPlanning::GenerateGraph()
 {
     int number_of_nodes = 2; //by default we have start and finish nodes
     //Calculate rest of nodes by totaling number of markers
+    std::vector<Path::Point> nodes;
+    nodes.push_back(vehicle_location);
+    nodes.push_back(goal);
     for(std::vector<Obstacle>::iterator it = obstacle_list.begin(); it < obstacle_list.end(); it++){
         for(std::vector<Obstacle::Marker>::iterator marker = it->GetMarkerLocations()->begin();
                 marker < it->GetMarkerLocations()->end(); marker++){
-            number_of_nodes++;
+            number_of_nodes += 4;
+            nodes.push_back(marker->FS_top);
+            nodes.push_back(marker->FS_bottom);
+            nodes.push_back(marker->FS_left);
+            nodes.push_back(marker->FS_right);
         }
     }
     //create graph
-   //Graph graph(number_of_nodes);
+   Graph graph = Graph(number_of_nodes);
+   
+   //iterate through each node and check for path to other nodes if path exists;
+    //add edges to graph
 }
 /*This should be a recursive function that finds the shortest path between the start
  *and goal. Calls itself whenever an obstacle appears, with new goal being 
@@ -111,7 +121,7 @@ bool PathPlanning::PointsAreEqual(const Path::Point& a, const Path::Point& b)
 //Makes the greedy choice to navigate around obstacle. Picks Marker_FS with preference to goal.
 Path::Point PathPlanning::ChooseGreedyPathAround(Path::Point cur_location, Obstacle object, Path::Point destination)
 {
-    object.InitializeFreeSpaces(2.5);
+    object.InitializeFreeSpaces(vehicle_width);
     Obstacle::Marker navigate_around = object.GetCorner();
     //Find free space with the closest average distance from start and goal.
     double min_distance = Path::AverageDistance(cur_location, destination, navigate_around.FS_bottom);
