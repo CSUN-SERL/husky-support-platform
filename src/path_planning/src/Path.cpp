@@ -85,17 +85,76 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
     }
     return reduced_list;
 }
-
-bool Path::PlaneIntersection(Path::Plane obstacle_plane, Path::Plane vehicle_plane)
+//returns true if planes do not intersect
+bool Path::NoPlaneIntersection(Path::Plane obstacle_plane, Path::Plane vehicle_plane)
 {
     if(obstacle_plane.min_x < vehicle_plane.max_x && obstacle_plane.max_x > vehicle_plane.min_x
             && obstacle_plane.min_y < vehicle_plane.max_y && obstacle_plane.max_y > vehicle_plane.min_y )
         return true;
 }
+
+/*Determines if an edge exists between two nodes.
+ * edge exists if there is no obstacle between two nodes
+ */
+bool Path::EdgeExists(std::vector<Obstacle> obstacle_list, Path::Point start, Path::Point goal)
+{
+    if(obstacle_list.empty())
+    {
+        return true;
+    }
+    
+    
+    double minX = start.x < goal.x ? start.x - (vehicle_dimension)/2: goal.x -(vehicle_dimension)/2;
+    double maxX = start.x > goal.x ? start.x + (vehicle_dimension)/2: goal.x +(vehicle_dimension)/2;
+    double minY = start.y < goal.y ? start.y - (vehicle_dimension)/2: goal.y -(vehicle_dimension)/2;;
+    double maxY = goal.y > goal.y ? start.y + (vehicle_dimension)/2: goal.y +(vehicle_dimension)/2;;
+    
+    Path::Point top_left = {minX, maxY};
+    Path::Point top_right = {maxX, maxY};
+    Path::Point bottom_left = {minX, minY};
+    Path::Point bottom_right = {maxX, minY};
+    
+    Point vertices[] = {top_left,top_right,bottom_left,bottom_right};
+    
+    Path::Plane vehicle_plane {minX, minY, maxX, maxY};
+    
+    //List returned is in order from furthest to closest
+    std::vector<Obstacle> reduced_list = Path::ReduceObstacleList(obstacle_list, vehicle_plane);
+
+    
+    for(std::vector<Obstacle>::iterator it = reduced_list.begin(); it < reduced_list.end(); it++){
+        double ob_minx = it->GetMarkerLocations()->at(0).x;
+        double ob_maxx = it->GetMarkerLocations()->at(0).x;
+        double ob_miny = it->GetMarkerLocations()->at(0).y;
+        double ob_maxy = it->GetMarkerLocations()->at(0).y;
+        
+
+        for(std::vector<Obstacle::Marker>::iterator marker = it->GetMarkerLocations()->begin();
+                marker < it->GetMarkerLocations()->end(); marker++){
+            if(marker->x < ob_minx)
+                ob_minx = marker->x;
+            if(marker->x > ob_maxx)
+               ob_maxx = marker->x;
+            if(marker->y < ob_miny)
+                ob_miny = marker->y;
+            if(marker->y > ob_maxy)
+                ob_maxy = marker->y;
+        }
+        Path::Plane obstacle_plane {ob_minx, ob_miny, ob_maxx, ob_maxy};
+        if(NoPlaneIntersection(obstacle_plane, vehicle_plane)){
+            return true;
+        }
+    }
+    
+    
+    return false;
+}
+
+
 /*Determines if an object_marker exists in the plane defined by:
  * vehicle_size, start, end
  * Returns object closest to vehicle
- */
+
 Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point start, Path::Point goal)
 {
     if(obstacle_list.empty())
@@ -155,7 +214,7 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
     
     return closest_obstacle;
 }
-
+*/
 void Path::SetVehicleDimension(double size)
 {
     this->vehicle_dimension = size;

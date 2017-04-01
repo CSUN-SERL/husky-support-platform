@@ -61,6 +61,8 @@ private:
     std::vector<Obstacle> SortObstacleList(const Path::Point & start,
         std::vector<Obstacle> obstacle_list);
     
+    void GenerateGraph();
+    
     Waypoints GenerateMinPath(Path::Point start,
         Path::Point destination);
     

@@ -35,8 +35,14 @@ PathPlanning::~PathPlanning()
 
 PathPlanning::Waypoints PathPlanning::GenerateMinPath(){
     PathPlanning::Waypoints points;
+    PathPlanning::GenerateGraph();
     points = GenerateMinPath(vehicle_location,goal);
     return points;
+}
+
+void PathPlanning::GenerateGraph()
+{
+    
 }
 /*This should be a recursive function that finds the shortest path between the start
  *and goal. Calls itself whenever an obstacle appears, with new goal being 
@@ -57,7 +63,7 @@ PathPlanning::Waypoints PathPlanning::GenerateMinPath(Path::Point start,
     
     PathPlanning::Waypoints points = {{},0.0,0};
 
-    while(PointsAreEqual(cur_location, destination) == false)
+    /*while(PointsAreEqual(cur_location, destination) == false)
     {
         //returns obstacle closest to goal
         Obstacle object_in_path = current_path.PointInPlane(sorted_list, cur_location, destination);
@@ -73,7 +79,7 @@ PathPlanning::Waypoints PathPlanning::GenerateMinPath(Path::Point start,
             MergeWaypoints(points, GenerateMinPath(cur_location, intermediate_goal));
             cur_location = intermediate_goal;
         }
-    }
+    }*/
     //delete &current_path;
     return points;
 }
