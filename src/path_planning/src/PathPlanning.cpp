@@ -14,7 +14,7 @@
 #include <Graph.h>
 
 using namespace std;
-double vehicle_width = 2.5;
+double vehicle_width = .5;
 std::vector<Path::Point> nodes;
 Path::Point PathPlanning::goal;
 Path::Point PathPlanning::vehicle_location;
@@ -47,7 +47,8 @@ PathPlanning::Waypoints PathPlanning::GenerateMinPath(){
     std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(1, previous);
     
     //total distance to destination. distance = 0 if not reachable
-    points.total_distance = min_distance[1];
+    //points.total_distance = min_distance[1];
+    points.total_distance = Path::CalcDistBetweenPoints(nodes.at(0),nodes.at(1));
     points.number_of_points = path.size();
     //retrieve waypoints from shortest path
     for(std::list<vertex_t>::const_iterator iterator = path.begin(), end = path.end(); iterator != end; ++iterator){

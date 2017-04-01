@@ -35,7 +35,7 @@ using namespace std;
  * 
  */
 int main(int argc, char** argv) {
-    /*Path::Point start;
+    Path::Point start;
     Path::Point goal;
     Path::Point midpoint;
     midpoint.x = 2.0;
@@ -45,16 +45,19 @@ int main(int argc, char** argv) {
     Obstacle::Marker marker2;
     Obstacle::Marker marker3;
     Obstacle::Marker marker4;
+    Obstacle::Marker marker5;
     marker1.x = 2.0; marker1.y = 1.0;
     marker2.x = 4.0; marker2.y = 1.0;
     marker3.x = 2.0; marker3.y = 4.0;
     marker4.x = 4.0; marker4.y = 4.0;
+    marker5.x = 15.0; marker5.y = 1.0;
     
     std::vector<Obstacle::Marker> marker_list;
     marker_list.push_back(marker1);
     marker_list.push_back(marker2);
     marker_list.push_back(marker3);
     marker_list.push_back(marker4);
+    marker_list.push_back(marker5);
     
     start.x = 0.0;
     start.y = 0.0;
@@ -73,10 +76,13 @@ int main(int argc, char** argv) {
     
     PathPlanning::Waypoints list = PathGen.GenerateMinPath();
     
-    printf("%f %d", list.total_distance, list.number_of_points);
-    return 0;*/
+    printf("distance is equal to %f, number of points is equal to %d \n", list.total_distance, list.number_of_points);
+    for (std::vector<Path::Point>::const_iterator i = list.vector.begin();
+            i != list.vector.end(); ++i){
+        printf("%f , %f \n", i->x, i->y);
+    }
     
-    Graph graph = Graph(6);
+    /*Graph graph = Graph(6);
     graph.addEdge(0,1,7);
     graph.addEdge(0,2,9);
     graph.addEdge(0,5,14);
@@ -99,11 +105,11 @@ int main(int argc, char** argv) {
     std::vector<weight_t> min_distance;
     std::vector<vertex_t> previous;
     graph.DijkstraComputePaths(0,  min_distance, previous);
-    std::cout << "Distance from 0 to 4: " << min_distance[4] << std::endl;
+    //std::cout << "Distance from 0 to 4: " << min_distance[4] << std::endl;
     std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(4, previous);
     std::cout << "Path : ";
     std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
-    std::cout << std::endl;
+    std::cout << std::endl;*/
     
 }
 
