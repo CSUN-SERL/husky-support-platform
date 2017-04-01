@@ -11,6 +11,7 @@
 #ifndef PATH_PLANNING_H
 #define PATH_PLANNING_H
 #include <vector>
+#include "Graph.h"
 
 class PathPlanning{
 public:
@@ -61,7 +62,7 @@ private:
     std::vector<Obstacle> SortObstacleList(const Path::Point & start,
         std::vector<Obstacle> obstacle_list);
     
-    void GenerateGraph();
+    Graph GenerateGraph();
     
     Waypoints GenerateMinPath(Path::Point start,
         Path::Point destination);

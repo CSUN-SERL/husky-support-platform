@@ -11,6 +11,7 @@
 #include <math.h>
 #include <algorithm>
 #include <stdio.h>
+#include <Graph.h>
 
 using namespace std;
 
@@ -35,14 +36,23 @@ PathPlanning::~PathPlanning()
 
 PathPlanning::Waypoints PathPlanning::GenerateMinPath(){
     PathPlanning::Waypoints points;
-    PathPlanning::GenerateGraph();
+    Graph graph = PathPlanning::GenerateGraph();
     points = GenerateMinPath(vehicle_location,goal);
     return points;
 }
 
-void PathPlanning::GenerateGraph()
+Graph PathPlanning::GenerateGraph()
 {
-    
+    int number_of_nodes = 2; //by default we have start and finish nodes
+    //Calculate rest of nodes by totaling number of markers
+    for(std::vector<Obstacle>::iterator it = obstacle_list.begin(); it < obstacle_list.end(); it++){
+        for(std::vector<Obstacle::Marker>::iterator marker = it->GetMarkerLocations()->begin();
+                marker < it->GetMarkerLocations()->end(); marker++){
+            number_of_nodes++;
+        }
+    }
+    //create graph
+   //Graph graph(number_of_nodes);
 }
 /*This should be a recursive function that finds the shortest path between the start
  *and goal. Calls itself whenever an obstacle appears, with new goal being 

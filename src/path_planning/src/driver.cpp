@@ -16,6 +16,18 @@
 #include "Obstacle.h"
 #include <stdio.h>
 #include "Path.h"
+#include "Graph.h"
+#include <iostream>
+#include <vector>
+#include <string>
+#include <list>
+ 
+#include <limits> // for numeric_limits
+ 
+#include <set>
+#include <utility> // for pair
+#include <algorithm>
+#include <iterator>
 
 using namespace std;
 
@@ -23,7 +35,7 @@ using namespace std;
  * 
  */
 int main(int argc, char** argv) {
-    Path::Point start;
+    /*Path::Point start;
     Path::Point goal;
     Path::Point midpoint;
     midpoint.x = 2.0;
@@ -62,6 +74,36 @@ int main(int argc, char** argv) {
     PathPlanning::Waypoints list = PathGen.GenerateMinPath();
     
     printf("%f %d", list.total_distance, list.number_of_points);
-    return 0;
+    return 0;*/
+    
+    Graph graph = Graph(6);
+    graph.addEdge(0,1,7);
+    graph.addEdge(0,2,9);
+    graph.addEdge(0,5,14);
+    graph.addEdge(1,0,7);
+    graph.addEdge(1,2,10);
+    graph.addEdge(1,3,15);
+    graph.addEdge(2,0,9);
+    graph.addEdge(2,1,10);
+    graph.addEdge(2,3,11);
+    graph.addEdge(2,5,2);
+    graph.addEdge(3,1,15);
+    graph.addEdge(3,2,11);
+    graph.addEdge(3,4,6);
+    graph.addEdge(4,3,6);
+    graph.addEdge(4,5,9);
+    graph.addEdge(5,0,14);
+    graph.addEdge(5,2,2);
+    graph.addEdge(5,4,9);
+    
+    std::vector<weight_t> min_distance;
+    std::vector<vertex_t> previous;
+    graph.DijkstraComputePaths(0,  min_distance, previous);
+    std::cout << "Distance from 0 to 4: " << min_distance[4] << std::endl;
+    std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(4, previous);
+    std::cout << "Path : ";
+    std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
+    std::cout << std::endl;
+    
 }
 

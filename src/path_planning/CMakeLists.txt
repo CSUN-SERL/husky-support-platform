@@ -28,6 +28,7 @@ catkin_package(
    src/PathPlanning.cpp
    src/Path.cpp
    src/driver.cpp
+   src/Graph.cpp
  )
  add_executable(driver src/driver.cpp)
 target_link_libraries(driver ${catkin_LIBRARIES} ${PROJECT_NAME})
