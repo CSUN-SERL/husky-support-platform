@@ -47,8 +47,8 @@ PathPlanning::Waypoints PathPlanning::GenerateMinPath(){
     std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(1, previous);
     
     //total distance to destination. distance = 0 if not reachable
-    //points.total_distance = min_distance[1];
-    points.total_distance = Path::CalcDistBetweenPoints(nodes.at(0),nodes.at(1));
+    points.total_distance = min_distance[1];
+    
     points.number_of_points = path.size();
     //retrieve waypoints from shortest path
     for(std::list<vertex_t>::const_iterator iterator = path.begin(), end = path.end(); iterator != end; ++iterator){
@@ -67,6 +67,7 @@ Graph PathPlanning::GenerateGraph()
     nodes.push_back(vehicle_location);
     nodes.push_back(goal);
     for(std::vector<Obstacle>::iterator it = obstacle_list.begin(); it < obstacle_list.end(); it++){
+        it->InitializeFreeSpaces(vehicle_width);
         for(std::vector<Obstacle::Marker>::iterator marker = it->GetMarkerLocations()->begin();
                 marker < it->GetMarkerLocations()->end(); marker++){
             number_of_nodes += 4;
@@ -84,7 +85,7 @@ Graph PathPlanning::GenerateGraph()
    for(int i = 0; i < nodes.size()-1; i++){
        for(int j = 1; j < nodes.size(); j++){
            if(graph_path.EdgeExists(obstacle_list, nodes.at(i), nodes.at(j))){
-               graph.addEdge(i,j,Path::CalcDistBetweenPoints(nodes.at(i),nodes.at(j)));
+               graph.addEdge(i,j,Path::CalcDistBetweenPoints(nodes.at(i),nodes.at(j)), nodes.at(j));
            }
        }
    }
@@ -92,6 +93,7 @@ Graph PathPlanning::GenerateGraph()
    return graph;
 }
 /*DEPRECATED 
+ * 
  * This should be a recursive function that finds the shortest path between the start
  *and goal. Calls itself whenever an obstacle appears, with new goal being 
  * an edge of the furthest obstacle in the way. Add way points to list as we
@@ -99,6 +101,8 @@ Graph PathPlanning::GenerateGraph()
  * i.e: Goal -> 2nd to last -> 3rd to last ... -> start.
  * Result should be the minimum path from start to goal.
  * 
+ * 
+ * DEPRECATED
  */
 PathPlanning::Waypoints PathPlanning::GenerateMinPath(Path::Point start,
         Path::Point destination)
@@ -131,7 +135,7 @@ PathPlanning::Waypoints PathPlanning::GenerateMinPath(Path::Point start,
     //delete &current_path;
     return points;
 }
-// Merge two lists of waypoints where a becomes a U b
+// DEPRECATED Merge two lists of waypoints where a becomes a U b
 void PathPlanning::MergeWaypoints(Waypoints a, Waypoints b)
 {
     a.vector.insert(a.vector.end(), b.vector.begin(), b.vector.end());

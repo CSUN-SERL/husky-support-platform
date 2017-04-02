@@ -38,26 +38,24 @@ int main(int argc, char** argv) {
     Path::Point start;
     Path::Point goal;
     Path::Point midpoint;
-    midpoint.x = 2.0;
+    midpoint.x = 5.0;
     midpoint.y = 2.0;
     
     Obstacle::Marker marker1;
     Obstacle::Marker marker2;
     Obstacle::Marker marker3;
     Obstacle::Marker marker4;
-    Obstacle::Marker marker5;
+
     marker1.x = 2.0; marker1.y = 1.0;
     marker2.x = 4.0; marker2.y = 1.0;
     marker3.x = 2.0; marker3.y = 4.0;
     marker4.x = 4.0; marker4.y = 4.0;
-    marker5.x = 15.0; marker5.y = 1.0;
     
     std::vector<Obstacle::Marker> marker_list;
     marker_list.push_back(marker1);
     marker_list.push_back(marker2);
     marker_list.push_back(marker3);
     marker_list.push_back(marker4);
-    marker_list.push_back(marker5);
     
     start.x = 0.0;
     start.y = 0.0;

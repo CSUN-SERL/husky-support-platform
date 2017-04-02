@@ -86,7 +86,7 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
     return reduced_list;
 }
 //returns true if planes do not intersect
-bool Path::NoPlaneIntersection(Path::Plane obstacle_plane, Path::Plane vehicle_plane)
+bool Path::PlaneIntersection(Path::Plane obstacle_plane, Path::Plane vehicle_plane)
 {
     if(obstacle_plane.min_x < vehicle_plane.max_x && obstacle_plane.max_x > vehicle_plane.min_x
             && obstacle_plane.min_y < vehicle_plane.max_y && obstacle_plane.max_y > vehicle_plane.min_y )
@@ -141,13 +141,13 @@ bool Path::EdgeExists(std::vector<Obstacle> obstacle_list, Path::Point start, Pa
                 ob_maxy = marker->y;
         }
         Path::Plane obstacle_plane {ob_minx, ob_miny, ob_maxx, ob_maxy};
-        if(NoPlaneIntersection(obstacle_plane, vehicle_plane)){
-            return true;
+        if(PlaneIntersection(obstacle_plane, vehicle_plane)){
+            return false;
         }
     }
     
     
-    return false;
+    return true;
 }
 
 

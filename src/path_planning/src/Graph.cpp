@@ -16,7 +16,7 @@
 #include <list>
  
 #include <limits> // for numeric_limits
- 
+#include <stdio.h>
 #include <set>
 #include <utility> // for pair
 #include <algorithm>
@@ -42,11 +42,9 @@ Graph::Graph(int V)
     adj = adjacency_list;
 }
  
-void Graph::addEdge(int v, int w, double distance)
+void Graph::addEdge(int v, int w, double distance, Path::Point point)
 {
-    adj[v].push_back(neighbor(w, distance)); // Add w to v’s list.
-    //add v to w's list so it is bidirectional.
-    adj[w].push_back(neighbor(v, distance));
+    adj[v].push_back(neighbor(w, distance, point)); // Add w to v’s list.
 }
 
 void Graph::DijkstraComputePaths(vertex_t source,

@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <list>
+#include "Path.h"
 
 using namespace std;
 
@@ -26,8 +27,9 @@ typedef double weight_t;
 struct neighbor {
     vertex_t target;
     weight_t weight;
-    neighbor(vertex_t arg_target, weight_t arg_weight)
-        : target(arg_target), weight(arg_weight) { }
+    Path::Point point;
+    neighbor(vertex_t arg_target, weight_t arg_weight, Path::Point arg_point)
+        : target(arg_target), weight(arg_weight), point(arg_point) { }
 };
 
 typedef std::vector<std::vector<neighbor> > adjacency_list_t;
@@ -42,7 +44,7 @@ public:
     Graph(int V); // Constructor
     virtual ~Graph(){};
     
-    void addEdge(int v, int w, double distance); // function to add an edge to graph
+    void addEdge(int v, int w, double distance, Path::Point point); // function to add an edge to graph
     void DijkstraComputePaths(vertex_t source,
                         
                           std::vector<weight_t> &min_distance,
