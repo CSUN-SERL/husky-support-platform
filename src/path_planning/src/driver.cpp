@@ -11,7 +11,7 @@
  * Created on March 5, 2017, 10:03 PM
  */
 
-#include <cstdlib>
+/*#include <cstdlib>
 #include "PathPlanning.h"
 #include "Obstacle.h"
 #include <stdio.h>
@@ -31,9 +31,7 @@
 
 using namespace std;
 
-/*
- * 
- */
+
 int main(int argc, char** argv) {
     Path::Point start;
     Path::Point goal;
@@ -108,7 +106,43 @@ int main(int argc, char** argv) {
     std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(1, previous);
     std::cout << "Path : ";
     std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
-    std::cout << std::endl;*/
+    std::cout << std::endl;
     
 }
+*/
 
+#include <cstdlib>
+#include "ros/ros.h"
+#include "std_msgs/Empty.h"
+#include <lcar_msgs/WorldMap.h>
+#include "ServiceCall.h"
+
+using namespace std;
+
+void ServiceCallback(const std_msgs::Empty notify)
+{
+    ROS_INFO("updating vector");
+    ServiceCall service = ServiceCall();
+    service.call();
+}
+int main(int argc, char **argv)
+{
+    ros::init(argc, argv, "world_map_client");
+    
+    ros::NodeHandle nh;
+    ros::ServiceClient client = nh.serviceClient<lcar_msgs::WorldMap>("world_map");
+    
+    lcar_msgs::WorldMap srv;
+    if(client.call(srv))
+    {
+        ROS_INFO("point x: %d point y: %d point z: %d", srv.response.world_map[0], srv.response.world_map[1], srv.response.world_map[2]);
+    }
+    ros::init(argc, argv, "listener");
+    ros::NodeHandle n;
+    
+    ros::Subscriber sub = n.subscribe("world_map_updated", 1000, ServiceCallback);
+    
+    ros::AsyncSpinner spinner(4);
+    spinner.start();
+    ros::waitForShutdown();
+}
