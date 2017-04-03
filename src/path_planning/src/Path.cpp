@@ -24,30 +24,8 @@ Path::~Path()
 
 //Calculates Distance between two points
 double Path::CalcDistBetweenPoints(Path::Point a, Path::Point b)
-{
-  /*int distancex = (b.x - a.x) * (b.x - a.x);
-  int distancey = (b.y - a.y) * (b.y - a.y);
-
-  double distance = sqrt(distancex + distancey);
-  
-  return distance;*/
-  
+{  
   return sqrt(pow((b.x - a.x),2) + pow((b.y - a.y),2));
-}
-
-/*Calculates distance between curLocation and intermediateGoal and
- * the distance between intermediateGoal and endGoal
- * then averages the two values
- */
-double Path::AverageDistance(Path::Point start, Path::Point end_goal, Path::Point inter_goal)
-{
-    double distance_a = Path::CalcDistBetweenPoints(start, inter_goal);
-    
-    double distance_b = Path::CalcDistBetweenPoints(inter_goal, end_goal);
-    
-    double average = (distance_a + distance_b)/2;
-    
-    return average;
 }
 
 //Calculates slope given two points
@@ -58,6 +36,7 @@ double Path::CalcSlope(Path::Point a, Path::Point b)
     return slope;
 }
 
+//Not Currently being used but will be useful for polygon detection.
 //returns reduced obstacle list with obstacle furthest from vehicle first.
 //If object doesnt have a marker within the min - max x/y values it can't be in the way
 //so we eliminate it from the list of obstacles to check.
@@ -153,7 +132,8 @@ bool Path::EdgeExists(std::vector<Obstacle> obstacle_list, Path::Point start, Pa
 }
 
 
-/*Determines if an object_marker exists in the plane defined by:
+/*Not Working Properly. Will be used to create polygons around objects
+ * Determines if an object_marker exists in the plane defined by:
  * vehicle_size, start, end
  * Returns object closest to vehicle
 
@@ -201,10 +181,6 @@ Obstacle Path::PointInPlane(std::vector<Obstacle> obstacle_list, Path::Point sta
                 }
             }
             if(inside){
-                //whenever obstacle is found reset closest_obstacle because list is in reverse order
-                //closest_obstacle = obstacle;               
-                //move on to next obstacle
-                //break;
                  
                 //return furthest obstacle from start as opposed to closest.
                 it->SetCorner(*marker);

@@ -34,12 +34,7 @@ public:
     bool PointsAreEqual(const Path::Point& a, const Path::Point& b);
     
     Waypoints GenerateMinPath();
-    
-    void MergeWaypoints(Waypoints a, Waypoints b);
-    
-    Path::Point ChooseGreedyPathAround(Path::Point cur_location, Obstacle object,
-        Path::Point destination);
-    
+     
     void SetVehicleLocation(const Path::Point &vehicle_location);
     
     Path::Point GetVehicleLocation();
@@ -57,12 +52,8 @@ private:
 
     std::vector< Path::Point > waypoints;
     
-
     std::vector<Obstacle> obstacle_list;
-    
-    std::vector<Obstacle> SortObstacleList(const Path::Point & start,
-        std::vector<Obstacle> obstacle_list);
-    
+     
     Graph GenerateGraph();
     
     Waypoints GenerateMinPath(Path::Point start,

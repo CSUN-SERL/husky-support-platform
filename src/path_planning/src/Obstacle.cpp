@@ -32,7 +32,6 @@ void Obstacle::InitializeFreeSpaces(double vehicle_dimension)
     for(std::vector<Obstacle::Marker>::iterator marker = this->GetMarkerLocations()->begin();
                 marker < this->GetMarkerLocations()->end(); marker++)
     {
-    //for(Obstacle::Marker auto &marker : this->marker_locations){
         marker->FS_bottom.y = marker->y - (vehicle_dimension/2 + (vehicle_dimension * .15));
         marker->FS_bottom.x = marker->x;
         CheckInvalidMarker(marker->FS_bottom);
@@ -54,7 +53,8 @@ void Obstacle::InitializeFreeSpaces(double vehicle_dimension)
 
 void Obstacle::CheckInvalidMarker(Path::Point &point)
 {
-    /*int i, j;
+    /*will be used when we are treating objects as proper polygons not rectangles
+     * int i, j;
     bool exists;
     for (i = 0, j = this->marker_locations.size()-1; i < this->marker_locations.size(); j = i++) {
         if ( ((marker_locations.at(i).y > point.y) != (marker_locations.at(j).y > point.y)) &&

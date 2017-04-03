@@ -38,13 +38,7 @@ public:
     
     //Calculates Distance between two points
     static double CalcDistBetweenPoints(Point a, Point b);
-    
-    /*Calculates distance between curLocation and intermediateGoal and
-     * the distance between intermediateGoal and endGoal
-     * then averages the two values
-     */
-    static double AverageDistance(Point start, Point end_goal, Point inter_goal);
-    
+   
     //returns reduced obstacle list
     //If object doesnt have a marker within the min - max x/y values it can't be in the way
     //so we eliminate it from the list of obstacles to check.
