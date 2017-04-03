@@ -25,12 +25,14 @@ Path::~Path()
 //Calculates Distance between two points
 double Path::CalcDistBetweenPoints(Path::Point a, Path::Point b)
 {
-  int distancex = (b.x - a.x) * (b.x - a.x);
+  /*int distancex = (b.x - a.x) * (b.x - a.x);
   int distancey = (b.y - a.y) * (b.y - a.y);
 
   double distance = sqrt(distancex + distancey);
   
-  return distance;
+  return distance;*/
+  
+  return sqrt(pow((b.x - a.x),2) + pow((b.y - a.y),2));
 }
 
 /*Calculates distance between curLocation and intermediateGoal and
@@ -88,8 +90,8 @@ std::vector <Obstacle> Path::ReduceObstacleList(std::vector<Obstacle> obstacle_l
 //returns true if planes do not intersect
 bool Path::PlaneIntersection(Path::Plane obstacle_plane, Path::Plane vehicle_plane)
 {
-    if(obstacle_plane.min_x < vehicle_plane.max_x && obstacle_plane.max_x > vehicle_plane.min_x
-            && obstacle_plane.min_y < vehicle_plane.max_y && obstacle_plane.max_y > vehicle_plane.min_y )
+    if(obstacle_plane.min_x <= vehicle_plane.max_x && obstacle_plane.max_x >=vehicle_plane.min_x
+            && obstacle_plane.min_y <= vehicle_plane.max_y && obstacle_plane.max_y >= vehicle_plane.min_y )
         return true;
 }
 
@@ -107,7 +109,7 @@ bool Path::EdgeExists(std::vector<Obstacle> obstacle_list, Path::Point start, Pa
     double minX = start.x < goal.x ? start.x - (vehicle_dimension)/2: goal.x -(vehicle_dimension)/2;
     double maxX = start.x > goal.x ? start.x + (vehicle_dimension)/2: goal.x +(vehicle_dimension)/2;
     double minY = start.y < goal.y ? start.y - (vehicle_dimension)/2: goal.y -(vehicle_dimension)/2;;
-    double maxY = goal.y > goal.y ? start.y + (vehicle_dimension)/2: goal.y +(vehicle_dimension)/2;;
+    double maxY = start.y > goal.y ? start.y + (vehicle_dimension)/2: goal.y +(vehicle_dimension)/2;;
     
     Path::Point top_left = {minX, maxY};
     Path::Point top_right = {maxX, maxY};
@@ -119,10 +121,10 @@ bool Path::EdgeExists(std::vector<Obstacle> obstacle_list, Path::Point start, Pa
     Path::Plane vehicle_plane {minX, minY, maxX, maxY};
     
     //List returned is in order from furthest to closest
-    std::vector<Obstacle> reduced_list = Path::ReduceObstacleList(obstacle_list, vehicle_plane);
+    //std::vector<Obstacle> reduced_list = Path::ReduceObstacleList(obstacle_list, vehicle_plane);
 
     
-    for(std::vector<Obstacle>::iterator it = reduced_list.begin(); it < reduced_list.end(); it++){
+    for(std::vector<Obstacle>::iterator it = obstacle_list.begin(); it < obstacle_list.end(); it++){
         double ob_minx = it->GetMarkerLocations()->at(0).x;
         double ob_maxx = it->GetMarkerLocations()->at(0).x;
         double ob_miny = it->GetMarkerLocations()->at(0).y;

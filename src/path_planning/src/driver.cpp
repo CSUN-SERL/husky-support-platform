@@ -38,8 +38,8 @@ int main(int argc, char** argv) {
     Path::Point start;
     Path::Point goal;
     Path::Point midpoint;
-    midpoint.x = 5.0;
-    midpoint.y = 2.0;
+    midpoint.x = 3.0;
+    midpoint.y = 3.0;
     
     Obstacle::Marker marker1;
     Obstacle::Marker marker2;
@@ -79,32 +79,33 @@ int main(int argc, char** argv) {
             i != list.vector.end(); ++i){
         printf("%f , %f \n", i->x, i->y);
     }
-    
-    /*Graph graph = Graph(6);
-    graph.addEdge(0,1,7);
-    graph.addEdge(0,2,9);
-    graph.addEdge(0,5,14);
-    graph.addEdge(1,0,7);
-    graph.addEdge(1,2,10);
-    graph.addEdge(1,3,15);
-    graph.addEdge(2,0,9);
-    graph.addEdge(2,1,10);
-    graph.addEdge(2,3,11);
-    graph.addEdge(2,5,2);
-    graph.addEdge(3,1,15);
-    graph.addEdge(3,2,11);
-    graph.addEdge(3,4,6);
-    graph.addEdge(4,3,6);
-    graph.addEdge(4,5,9);
-    graph.addEdge(5,0,14);
-    graph.addEdge(5,2,2);
-    graph.addEdge(5,4,9);
+    /*
+    Graph graph = Graph(6);
+    graph.addEdge(0,2,2.0,midpoint);
+    graph.addEdge(0,3,3.6055,midpoint);
+    graph.addEdge(0,4,4.0,midpoint);
+    graph.addEdge(0,5,5.5677,midpoint);
+    graph.addEdge(1,3,6.0,midpoint);
+    graph.addEdge(1,4,5.916,midpoint);
+    graph.addEdge(1,5,5.5677,midpoint);
+    graph.addEdge(2,0,9.0,midpoint);
+    graph.addEdge(2,1,10.0,midpoint);
+    graph.addEdge(2,3,11.,midpoint);
+    graph.addEdge(2,5,2.,midpoint);
+    graph.addEdge(3,1,15.,midpoint);
+    graph.addEdge(3,2,11.,midpoint);
+    graph.addEdge(3,4,6.,midpoint);
+    graph.addEdge(4,3,6.,midpoint);
+    graph.addEdge(4,5,9.,midpoint);
+    graph.addEdge(5,0,14.,midpoint);
+    graph.addEdge(5,2,2.,midpoint);
+    graph.addEdge(5,4,9.,midpoint);
     
     std::vector<weight_t> min_distance;
     std::vector<vertex_t> previous;
     graph.DijkstraComputePaths(0,  min_distance, previous);
     //std::cout << "Distance from 0 to 4: " << min_distance[4] << std::endl;
-    std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(4, previous);
+    std::list<vertex_t> path = graph.DijkstraGetShortestPathTo(1, previous);
     std::cout << "Path : ";
     std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
     std::cout << std::endl;*/

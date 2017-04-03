@@ -23,6 +23,7 @@ public:
         double total_distance;
         int number_of_points;
     };
+
     PathPlanning();
     
     PathPlanning(const Path::Point & start, const Path::Point & goal,

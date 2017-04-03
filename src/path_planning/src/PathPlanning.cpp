@@ -11,10 +11,11 @@
 #include <math.h>
 #include <algorithm>
 #include <stdio.h>
+#include <iterator>
 #include <Graph.h>
 
 using namespace std;
-double vehicle_width = .5;
+double vehicle_width = 1.5;
 std::vector<Path::Point> nodes;
 Path::Point PathPlanning::goal;
 Path::Point PathPlanning::vehicle_location;
@@ -62,7 +63,6 @@ Graph PathPlanning::GenerateGraph()
 {
     int number_of_nodes = 2; //by default we have start and finish nodes
     //Calculate rest of nodes by totaling number of markers
-    
     Path graph_path = Path(vehicle_width);
     nodes.push_back(vehicle_location);
     nodes.push_back(goal);
@@ -82,13 +82,32 @@ Graph PathPlanning::GenerateGraph()
    
    //iterate through each node and check for path to other nodes if path exists;
     //add edges to graph
+   
    for(int i = 0; i < nodes.size()-1; i++){
-       for(int j = 1; j < nodes.size(); j++){
-           if(graph_path.EdgeExists(obstacle_list, nodes.at(i), nodes.at(j))){
-               graph.addEdge(i,j,Path::CalcDistBetweenPoints(nodes.at(i),nodes.at(j)), nodes.at(j));
+        for(int j = i+1; j < nodes.size(); j++){
+            if(graph_path.EdgeExists(obstacle_list, nodes.at(i), nodes.at(j))){
+                if(Path::CalcDistBetweenPoints(nodes.at(i),nodes.at(j)) != 0){
+                    graph.addEdge(i,j,Path::CalcDistBetweenPoints(nodes.at(i),nodes.at(j)), nodes.at(j));
+                    graph.addEdge(j,i,Path::CalcDistBetweenPoints(nodes.at(i),nodes.at(j)), nodes.at(i));
+                }
+            }
+        }
+   }
+   /*
+   int i = 0, j;
+   for (std::vector<Path::Point>::iterator primary_node = nodes.begin();
+             primary_node != nodes.end();
+             primary_node++, i++){
+       j = i+1;
+       for(std::vector<Path::Point>::iterator secondary_node = primary_node+1;
+               secondary_node != nodes.end();
+               secondary_node++, j++){
+           if(graph_path.EdgeExists(obstacle_list, *primary_node, *secondary_node)){
+               graph.addEdge(i,j,Path::CalcDistBetweenPoints(*primary_node, *secondary_node), *secondary_node);
+               graph.addEdge(j,i,Path::CalcDistBetweenPoints(*secondary_node, *primary_node), *primary_node);
            }
        }
-   }
+   }*/
    
    return graph;
 }

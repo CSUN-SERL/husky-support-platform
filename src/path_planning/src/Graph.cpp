@@ -47,6 +47,7 @@ void Graph::addEdge(int v, int w, double distance, Path::Point point)
     adj[v].push_back(neighbor(w, distance, point)); // Add w to v’s list.
 }
 
+
 void Graph::DijkstraComputePaths(vertex_t source,
                           std::vector<weight_t> &min_distance,
                           std::vector<vertex_t> &previous)
