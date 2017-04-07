@@ -28,11 +28,11 @@ ServiceCall::ServiceCall(const ServiceCall& orig) {
 
 ServiceCall::~ServiceCall() {
 }
-std::vector<int> ServiceCall::call()
+std::vector<double> ServiceCall::call()
 {
     if(client.call(srv))
     {
-        ROS_INFO("point x: %d point y: %d point z: %d", srv.response.world_map[0], srv.response.world_map[1], srv.response.world_map[2]);
+        ROS_INFO("point x: %f point y: %f point z: %f", srv.response.world_map[3], srv.response.world_map[4], srv.response.world_map[5]);
     }
     return srv.response.world_map;
 }

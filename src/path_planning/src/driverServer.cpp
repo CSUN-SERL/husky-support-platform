@@ -10,7 +10,7 @@
 
 bool WorldMapRequested(lcar_msgs::WorldMap::Request& req, lcar_msgs::WorldMap::Response& res)
 {
-    std::vector<int> vector;
+    std::vector<double> vector;
     vector.push_back(1);
     vector.push_back(2);
     vector.push_back(15);

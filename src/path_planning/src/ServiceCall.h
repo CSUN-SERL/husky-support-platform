@@ -21,7 +21,7 @@ public:
     ServiceCall();
     lcar_msgs::WorldMap srv;
     ServiceCall(const ServiceCall& orig);
-    std::vector<int> call();
+    std::vector<double> call();
     virtual ~ServiceCall();
 private:
 

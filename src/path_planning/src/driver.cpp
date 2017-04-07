@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     lcar_msgs::WorldMap srv;
     if(client.call(srv))
     {
-        ROS_INFO("point x: %d point y: %d point z: %d", srv.response.world_map[0], srv.response.world_map[1], srv.response.world_map[2]);
+        ROS_INFO("point x: %f point y: %f point z: %f", srv.response.world_map[3], srv.response.world_map[4], srv.response.world_map[5]);
     }
     ros::init(argc, argv, "listener");
     ros::NodeHandle n;
