@@ -1,0 +1,19 @@
+#
+# Definition of all trackable objects
+# Identifier corresponds to Trackable ID set in Tracking Tools
+#
+rigid_bodies:
+    '1':
+        pose: object/pose
+        pose2d: object/ground_pose
+        child_frame_id: object/base_link
+        parent_frame_id: world
+        use_new_coordinates: false
+    '2':
+        pose: Robot_2/pose
+        pose2d: Robot_2/ground_pose
+        child_frame_id: Robot_2/base_link
+        parent_frame_id: world
+        use_new_coordinates: false
+optitrack_config:
+        multicast_address: 239.255.42.99
