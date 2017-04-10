@@ -61,10 +61,10 @@ class UGVControl: public gcs::VehicleControl {
      void PauseMission(){ mission_mode = gcs::paused; };
      void ResumeMission(){ mission_mode = gcs::active; };
      void StopMission(){ mission_mode = gcs::stopped; };
-      void GetMissionMode(){ /*return mission_mode; */};
+      void GetMissionMode(){ return mission_mode;};
      //MissionMode GetMissionMode(){ return mission_mode; };
      float GetMissiontProgress() { return -1; };
-     int GetBattery() { return battery; };
+     int GetBattery() { return state.battery; };
      std::string GetMode() { return  mode; };
 
     private:
