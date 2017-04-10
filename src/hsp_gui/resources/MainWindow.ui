@@ -15,10 +15,10 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="2">
+    <item row="3" column="2">
      <widget class="QPushButton" name="Go_Button">
       <property name="focusPolicy">
-       <enum>Qt::StrongFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(85, 170, 127);
@@ -32,7 +32,7 @@ color: rgb(0, 0, 0);</string>
        <bool>true</bool>
       </property>
       <property name="autoRepeat">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="autoRepeatDelay">
        <number>0</number>
@@ -42,39 +42,23 @@ color: rgb(0, 0, 0);</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
+    <item row="2" column="2">
      <widget class="QSlider" name="horizontalSlider">
       <property name="focusPolicy">
-       <enum>Qt::StrongFocus</enum>
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="maximum">
+       <number>100</number>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="image_frame">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>1</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>100</width>
-        <height>100</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
+    <item row="5" column="2">
      <widget class="QPushButton" name="stop_Button">
       <property name="focusPolicy">
-       <enum>Qt::StrongFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 85, 0);
@@ -85,7 +69,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="9" column="0">
      <widget class="QProgressBar" name="batteryBar">
       <property name="palette">
        <palette>
@@ -516,7 +500,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="2">
+    <item row="9" column="2">
      <widget class="QPushButton" name="close_button">
       <property name="palette">
        <palette>
@@ -949,7 +933,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="2" rowspan="2">
+    <item row="7" column="2" rowspan="2">
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="3" column="3" alignment="Qt::AlignTop">
        <widget class="QPushButton" name="btn_down">
@@ -969,7 +953,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
          <bool>true</bool>
         </property>
         <property name="autoRepeat">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="autoRepeatDelay">
          <number>0</number>
@@ -994,7 +978,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
          <bool>true</bool>
         </property>
         <property name="autoRepeat">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="autoRepeatDelay">
          <number>0</number>
@@ -1019,7 +1003,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
          <bool>true</bool>
         </property>
         <property name="autoRepeat">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="autoRepeatDelay">
          <number>0</number>
@@ -1050,7 +1034,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
          <bool>false</bool>
         </property>
         <property name="autoRepeat">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="autoRepeatDelay">
          <number>0</number>
@@ -1062,19 +1046,19 @@ font: 75 12pt &quot;STIX&quot;;</string>
       </item>
      </layout>
     </item>
-    <item row="1" column="0">
+    <item row="3" column="0">
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="1" column="0">
        <widget class="QLineEdit" name="LatBox">
         <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
+         <enum>Qt::NoFocus</enum>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="loc_Button">
         <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 170, 255);
@@ -1088,7 +1072,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
       <item row="1" column="1">
        <widget class="QLineEdit" name="LongBox">
         <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
+         <enum>Qt::NoFocus</enum>
         </property>
        </widget>
       </item>
@@ -1098,13 +1082,13 @@ font: 75 12pt &quot;STIX&quot;;</string>
          <string notr="true">font: 12pt &quot;STIX&quot;;</string>
         </property>
         <property name="text">
-         <string>Enter Lattitude and Longitude</string>
+         <string>Enter Crawl and Turn Information:</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
-    <item row="4" column="2">
+    <item row="6" column="2">
      <widget class="QTextEdit" name="textEdit">
       <property name="focusPolicy">
        <enum>Qt::StrongFocus</enum>
@@ -1115,6 +1099,36 @@ font: 75 12pt &quot;STIX&quot;;</string>
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Please Input the Coordinates!!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="AutoButton">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 0);
+font: 75 12pt &quot;STIX&quot;;</string>
+      </property>
+      <property name="text">
+       <string>Automate Movement</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="image_frame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>1</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </item>
