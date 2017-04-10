@@ -1,0 +1,10 @@
+/build/
+build
+devel
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+/src/path_planning/dist/
