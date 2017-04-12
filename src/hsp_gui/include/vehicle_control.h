@@ -40,7 +40,7 @@ public:
     virtual void PauseMission() = 0;//{ mission_mode = paused; };
     virtual void ResumeMission() = 0;//{ mission_mode = active; };
     virtual void StopMission() = 0;//{ mission_mode = stopped; };
-    virtual void GetMissionMode(){ /*return mission_mode;*/ };
+    virtual MissionMode GetMissionMode(){ /*return mission_mode;*/ };
     virtual float GetMissiontProgress() { return -1; };
     virtual int GetBattery() { return battery; };
     virtual std::string GetMode() { return  mode; };

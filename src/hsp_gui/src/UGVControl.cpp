@@ -10,10 +10,10 @@
 //VehicleControl overriden methods
 void UGVControl::Arm(bool value){
     //gcs::State.armed=value;
-    state.armed=value;
+    vehicleInfo.state.armed=value;
 }
 bool UGVControl::IsArmed(){
-    return state.armed;
+    return vehicleInfo.state.armed;
     //return gcs::State.armed;
     
 }
@@ -52,7 +52,7 @@ bool UGVControl::IsArmed(){
             husky_pub.publish(msg);
         }
         void UGVControl::setBatteryStatus(int battery){
-            state.battery=battery;
+            vehicleInfo.state.battery=battery;
             // batteryStatus=battery;
         }
         

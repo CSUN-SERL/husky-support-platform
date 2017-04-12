@@ -19,7 +19,8 @@ class UGVControl: public gcs::VehicleControl {
     public:
          const int id=gcs::VehicleType_::ugv;
         UGVControl(int id):VehicleControl(id){
-            state.armed=false;
+            vehicleInfo.id=id;
+            vehicleInfo.state.armed=false;
             
          
             forward = 0;
@@ -61,17 +62,18 @@ class UGVControl: public gcs::VehicleControl {
      void PauseMission(){ mission_mode = gcs::paused; };
      void ResumeMission(){ mission_mode = gcs::active; };
      void StopMission(){ mission_mode = gcs::stopped; };
-      void GetMissionMode(){ return mission_mode;};
+     gcs::MissionMode GetMissionMode(){ return mission_mode;};
      //MissionMode GetMissionMode(){ return mission_mode; };
      float GetMissiontProgress() { return -1; };
-     int GetBattery() { return state.battery; };
+     int GetBattery() { return vehicleInfo.state.battery; };
      std::string GetMode() { return  mode; };
 
     private:
         //varibles required for overriding
         //bool armedStatus;
         //std::string mission_mode=
-        gcs::State state;
+        gcs::VehicleInfo vehicleInfo;
+        //gcs::State state;
         
         
         
