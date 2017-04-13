@@ -15,8 +15,8 @@ include_directories(${ugv_control_INCLUDE_DIRECTORIES}
                     
                     ${catkin_INCLUDE_DIRS} )
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES husky
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -26,10 +26,15 @@ catkin_package(
 ## Declare a C++ library
  add_library(${PROJECT_NAME}
    src/UGVControl.cpp
+   src/Position.cpp
+   src/Vector.cpp
+   src/Destination.cpp
+   src/VectorAngleCalculator.cpp
+   src/Demo.cpp
  )
 
 
-
+add_definitions(${catkin_DEFINITIONS} -std=c++11)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -94,4 +99,7 @@ catkin_package(
 
 add_executable(mover src/mover.cpp)
 target_link_libraries(mover ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+add_executable(position_tester src/position_tester.cpp)
+target_link_libraries(position_tester ${catkin_LIBRARIES} ${PROJECT_NAME})
 #add_dependencies(mover husky_generate_messages_cpp)

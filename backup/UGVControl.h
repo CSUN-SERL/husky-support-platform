@@ -1,3 +1,7 @@
+
+#ifndef HUSKY_MOVER_H
+#define HUSKY_MOVER_H
+
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <sensor_msgs/LaserScan.h>
@@ -7,8 +11,7 @@
 #include <iostream>
 #include <std_msgs/Float64.h>
 #include <vehicle_control.h>
-#ifndef HUSKY_MOVER_H
-#define HUSKY_MOVER_H
+
 #include <string>
 #include <husky_msgs/HuskyStatus.h>
 #include <fstream>

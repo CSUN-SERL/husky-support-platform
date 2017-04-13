@@ -11,7 +11,6 @@ set(path_planning_INCLUDE_DIRECTORIES
 	 )
 
 include_directories(${path_planning_INCLUDE_DIRECTORIES}
-                    
                     ${catkin_INCLUDE_DIRS} )
 catkin_package(
 #  INCLUDE_DIRS include
@@ -20,7 +19,7 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-
+add_definitions(${catkin_DEFINITIONS} -std=c++11)
 
 ## Declare a C++ library
  add_library(${PROJECT_NAME}

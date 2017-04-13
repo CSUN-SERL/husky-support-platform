@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     ros::init(argc, argv, "husky");
     //ros::MultiThreadedSpinner spinner(5);
     ros::AsyncSpinner spinner(0);
-    UGVControl husky(1000);
-    MainWindow m(&husky);
+    UGVControl * husky = new UGVControl;
+    MainWindow m(husky);
    // UGVControl moveTester;
    // moveTester.crawl(10);
    // moveTester.turn(10);

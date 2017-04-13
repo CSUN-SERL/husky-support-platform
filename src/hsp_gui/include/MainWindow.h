@@ -19,9 +19,10 @@ public:
     void ImageCallback(const sensor_msgs::ImageConstPtr& msg);
   // void statusCallBack(const std_msgs::Float64 msg);
     void UpdateBatteryBar(double batteryPercentage);
-void keyPressEvent(QKeyEvent* e);
-void keyReleaseEvent(QKeyEvent* e);
-void  BatteryLooper();
+    void keyPressEvent(QKeyEvent* e) override;
+    void keyReleaseEvent(QKeyEvent* e)override;
+    void  BatteryLooper();
+    
 public slots:
     void OnLeftClicked();
     void OnRightClicked();
@@ -32,14 +33,17 @@ public slots:
     void OnStopClicked();
     //test
     void loc_ButtonClicked();
-    void autoClicked();
+    //void autoClicked();
     void OnReleased();
         
+    void onCoordinatesSubmited();
+    
 private:
     UGVControl *husky;
     Ui::MainWindow widget;
     ros::NodeHandle nh;
     ros::Publisher pub_cmd_vel;
+    ros::Subscriber sub_events;
     image_transport::Subscriber sub_img;
     std::thread batteryLooper;
     double linear,
