@@ -26,6 +26,10 @@ catkin_package(
 ## Declare a C++ library
  add_library(${PROJECT_NAME}
    src/UGVControl.cpp
+   src/Position.cpp
+   src/Vector.cpp
+   src/Destination.cpp
+   src/VectorAngleCalculator.cpp
  )
 
 
@@ -94,4 +98,6 @@ catkin_package(
 
 add_executable(mover src/mover.cpp)
 target_link_libraries(mover ${catkin_LIBRARIES} ${PROJECT_NAME})
+add_executable(position_tester src/position_tester.cpp)
+target_link_libraries(position_tester ${catkin_LIBRARIES} ${PROJECT_NAME})
 #add_dependencies(mover husky_generate_messages_cpp)
