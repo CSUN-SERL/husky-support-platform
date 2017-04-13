@@ -1,8 +1,7 @@
 #include "UGVControl.h"
+#include "Demo.h"
 
-UGVControl::UGVControl() //:
-//position(new Position())
-{
+UGVControl::UGVControl() {
     this->initiateAttributes();
     this->initiateObjects();
     this->initiatePublishers();
@@ -10,20 +9,23 @@ UGVControl::UGVControl() //:
 }
 
 //private------------------------------------------------------------------------
+
 void UGVControl::initiateAttributes() {
     arrived = true;
+    armed = false;
     forward = 0;
     rotate = 0;
     moveTimer = n.createTimer(ros::Duration(0.1), &UGVControl::move, this);
+    moveTimer.stop();
     moveToTimer = n.createTimer(ros::Duration(0.1), &UGVControl::autoMove, this);
+    moveToTimer.stop();
     eventTimer = n.createTimer(ros::Duration(2.0), &UGVControl::publishEvent, this);
     angleCalc = VectorAngleCalculator();
-    moveToTimer.stop();
 }
 
 void UGVControl::initiateObjects() {
     position = new Position();
-    random_msgs = {"Hey", "Hi", "Hello", "Hell NO", "yep" };
+    random_msgs = {"Hey", "Hi", "Hello", "Hell NO", "yep"};
 }
 
 void UGVControl::initiatePublishers() {
@@ -32,23 +34,38 @@ void UGVControl::initiatePublishers() {
 }
 
 void UGVControl::initiateSubscribers() {
-    
+
 }
 
 void UGVControl::crawl(double f) {
+    if (!armed) return;
     forward = f;
+    moveTimer.start();
 }
 
 void UGVControl::turn(double r) {
+    if (!armed) return;
     rotate = r;
+    moveTimer.start();
 }
 
 void UGVControl::stop() {
     forward = 0;
     rotate = 0;
+    armed = false;
+    moveTimer.stop();
 }
 
-bool UGVControl::hasArrived(){
+bool UGVControl::arm() {
+    armed = true;
+    return armed;
+}
+
+bool UGVControl::isArmed() {
+    return armed;
+}
+
+bool UGVControl::hasArrived() {
     return arrived;
 }
 
@@ -63,89 +80,67 @@ void UGVControl::move(const ros::TimerEvent& event) {
     husky_pub.publish(msg);
 }
 
-void UGVControl::moveTo(double x, double y){
+void UGVControl::moveTo(double x, double y) {
+    if(!armed) return;
     arrived = false;
+    initiallyAligned = false;
     destination = Destination(x, y, position);
     moveToTimer.start();
 }
 
-void UGVControl::autoMove(const ros::TimerEvent& event){
-    if(arrived){
-        moveToTimer.stop();
-        stop();        
-    }else{
+void UGVControl::autoMove(const ros::TimerEvent& event) {
+    if (arrived) {
+        stop();
+    } else {
         moveToDestintion();
     }
-    //ROS_INFO("Angular Speed:%f", rotate);
-    //ROS_INFO("Linear Speed:%f", forward);
 }
 
-void UGVControl::moveToDestintion(){
-    if(initiallyAligned){
+void UGVControl::moveToDestintion() {
+    if (initiallyAligned) {
         Vector dVector = destination.getVector();
-        
-        double desMag = dVector.mag;
-        //ROS_INFO("Destinatin mag.: %f" , desMag); 
-        if(desMag < 50){
-            crawl(0.0);            
+        double desMag = dVector.mag; // Destination vector magnitude
+        if (desMag < destinationTolerance) {
             arrived = true;
-        }else{
-            crawl(0.2);        
+        } else {
+            crawl(autoLinearSpeed);
         }
     }
-    align();    
+    align();
 }
 
-void UGVControl::publishEvent(const ros::TimerEvent& event)
-{
+void UGVControl::publishEvent(const ros::TimerEvent& event) {
     std_msgs::String s;
     s.data = random_msgs.at(rand() % random_msgs.size());
     pub_events.publish(s);
 }
 
-void UGVControl::align(){
-    if(isAligned()){
+void UGVControl::align() {
+    if (isAligned()) {
         initiallyAligned = true;
-        turn(0.0);        
+        turn(0.0);
     }
 }
 
-bool UGVControl::isAligned(){
-    double tolerance = 5.0;
+bool UGVControl::isAligned() {
     Vector pVector = position->getVector();
     Vector dVector = destination.getVector();
-    double test = angleCalc.degree(&pVector, &dVector);
-    //ROS_INFO("Angle: %f" , test);
-    
-    if(abs(test) <= tolerance){
+    double angleCheck = angleCalc.degree(&pVector, &dVector);
+
+    if (abs(angleCheck) <= angularTolerance) {
         return true;
-    }else{
-        if(test > 0.0){
-            turn(-0.5);
-        }else{
-            turn(0.5);    
+    } else {
+        if (angleCheck > 0.0) {
+            turn(-1.0 * autoAngularSpeed);
+        } else {
+            turn(autoAngularSpeed);
         }
         return false;
     }
 }
 
 UGVControl::~UGVControl() {
-   delete position; 
+    delete position;
 }
 
-//void UGVControl::LaserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
-//{
-//    laser=*scan;
-//    for(int i = 0; i < laser.ranges.size(); i++){
-//        ROS_INFO("point_of_ranges=[%f] \n", laser.ranges[i]); // this works
-//   }
-//}
-
-//void UGVControl::LocationCallback(const nav_msgs::Odometry::ConstPtr& msg)
-//{
-//  ROS_INFO("Seq: [%d]", msg->header.seq);
-//  ROS_INFO("Position-> x: [%f], y: [%f], z: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y, msg->pose.pose.position.z);
-//  ROS_INFO("Orientation-> x: [%f], y: [%f], z: [%f], w: [%f]", msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
-//  ROS_INFO("Vel-> Linear: [%f], Angular: [%f]", msg->twist.twist.linear.x,msg->twist.twist.angular.z);
-//}
 

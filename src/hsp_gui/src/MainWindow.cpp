@@ -249,7 +249,7 @@ void MainWindow::onCoordinatesSubmited() {
     double lng = widget.LongBox->text().toDouble(&ok);
     if (!ok)
         return;
-
+    husky->arm();
     husky->moveTo(lat, lng);
 }
 
