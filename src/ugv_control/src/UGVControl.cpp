@@ -54,6 +54,7 @@ void UGVControl::stop() {
     rotate = 0;
     armed = false;
     moveTimer.stop();
+    moveToTimer.stop();
 }
 
 bool UGVControl::arm() {

@@ -138,6 +138,7 @@ void MainWindow::TranslateAndPublish() {
 
 void MainWindow::OnLeftClicked() {
     widget.textEdit->setText("Moving husky to the left. \n");
+    husky->arm();
     husky -> turn(-ACCEL);
 }
 
@@ -148,16 +149,19 @@ void MainWindow::OnReleased() {
 
 void MainWindow::OnRightClicked() {
     widget.textEdit->setText("Moving husky to the right. \n");
+    husky->arm();
     husky -> turn(ACCEL);
 }
 
 void MainWindow::OnUpClicked() {
     widget.textEdit->setText("Moving husky up. \n");
+    husky->arm();
     husky -> crawl((double) ACCEL / 2);
 }
 
 void MainWindow::OnDownClicked() {
     widget.textEdit->setText("Moving husky down. \n");
+    husky->arm();
     husky -> crawl((double) (-ACCEL / 2));
 }
 
