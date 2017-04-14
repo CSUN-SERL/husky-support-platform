@@ -82,7 +82,9 @@ MainWindow::MainWindow(UGVControl *husky):
     
     connect(widget.AutoButton, &QPushButton::clicked,
             this,&MainWindow::autoClicked);
-  
+    connect(widget.Get_Battery,&QPushButton::clicked,this, &MainWindow::OnBatteryClick);
+    //connect(widget.Get_Battery,&QPushButton::clicked,this,&MainWindow::OnBatteryClick)
+    //connect(Ui::MainWindow.Get_Battery, &QPushButton::clicked, this, &MainWindow::OnBatteryClick);
     /* connect(widget.Go_Button, &QPushButton::clicked,
             this, &QProgressBar::value(100)); */
     widget.textEdit->setText("Hello I am a Log Box\n");
@@ -151,7 +153,11 @@ void MainWindow::ImageCallback(const sensor_msgs::ImageConstPtr& in)
 //widget.batteryBar(batteryPercentage);
 //}
 
-
+void MainWindow::OnBatteryClick(){
+    husky->BatteryPub();
+    
+    
+}
 void MainWindow::TranslateAndPublish()
 {
     geometry_msgs::Twist twist;

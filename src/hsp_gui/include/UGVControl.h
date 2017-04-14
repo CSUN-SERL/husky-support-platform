@@ -37,6 +37,7 @@ class UGVControl: public gcs::VehicleControl {
         void stop();
         void statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg);
         //void statusCallBack(const std_msgs::Float64::ConstPtr& msg);
+        void BatteryPub();
         void setBatteryStatus(int battery);
         //vehicle_control GetBattery()
         //int getBatteryStatus();
@@ -74,7 +75,7 @@ class UGVControl: public gcs::VehicleControl {
         //std::string mission_mode=
         gcs::VehicleInfo vehicleInfo;
         //gcs::State state;
-        
+        std_msgs::String jsonMsg;
         
         
         

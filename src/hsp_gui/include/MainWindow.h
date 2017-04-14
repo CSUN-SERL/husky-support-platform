@@ -22,6 +22,7 @@ public:
 void keyPressEvent(QKeyEvent* e);
 void keyReleaseEvent(QKeyEvent* e);
 void  BatteryLooper();
+
 public slots:
     void OnLeftClicked();
     void OnRightClicked();
@@ -34,10 +35,12 @@ public slots:
     void loc_ButtonClicked();
     void autoClicked();
     void OnReleased();
+    void OnBatteryClick();
         
 private:
     UGVControl *husky;
     Ui::MainWindow widget;
+    
     ros::NodeHandle nh;
     ros::Publisher pub_cmd_vel;
     image_transport::Subscriber sub_img;

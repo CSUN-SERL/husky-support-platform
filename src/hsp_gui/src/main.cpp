@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
    
     QApplication app(argc, argv);
 
-    ros::init(argc, argv, "husky");
+    ros::init(argc, argv, "husky_penis");
     //ros::MultiThreadedSpinner spinner(5);
     ros::AsyncSpinner spinner(0);
     UGVControl husky(1000);

@@ -51,9 +51,13 @@ bool UGVControl::IsArmed(){
             msg.angular.z = rotate;
             husky_pub.publish(msg);
         }
+void UGVControl::BatteryPub(){
+    UGVControl::status_pub.publish(UGVControl::jsonMsg);
+}
         void UGVControl::setBatteryStatus(int battery){
             vehicleInfo.state.battery=battery;
             // batteryStatus=battery;
+
         }
         
         /*the overridden vehicle_control GetBattery();
@@ -98,14 +102,39 @@ Parameter:   __n2 Number of characters from str to use.
            //buffer.replace(index+1,1,batteryString[1],1);
            buffer[index]=batteryString[0];
            buffer[index+1]=batteryString[1];
-           std_msgs::String buffer_msg;
-           buffer_msg.data=buffer;
-           UGVControl::status_pub.publish(buffer_msg);
+           //std_msgs::String buffer_msg;
+           UGVControl::jsonMsg.data=buffer;
+           //buffer_msg.data=buffer;
+           //UGVControl::jsonMsg.assign(buffer_msg);
+           //UGVControl::status_pub.publish(buffer_msg);
            //ROS_WARN_STREAM("integer: " << buffer);
         
         }
         void jSONFileEditorMissionStatus(std::string Stringer, std::string buffer){
-        
+        int index= buffer.find("mission_Status");
+        if (buffer[19]='f'){
+          
+           buffer[19]='t';
+           buffer[20]='r';
+           buffer[21]='u';
+           buffer[22]='e';
+           buffer[23]=' ';
+           
+           //while(i<=23){
+             //  buffer
+           //}
+        }
+        else if (buffer[19]='t'){
+         buffer[19]='f';
+           buffer[20]='a';
+           buffer[21]='l';
+           buffer[22]='s';
+           buffer[23]='e';
+        }
+           //add the chars of batery_percentage and the colon that follows
+           index=index+20;
+           int batteryStatus= UGVControl::GetBattery();
+           std::string batteryString=std::to_string(batteryStatus);
         }
         void UGVControl::statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg){
     //std::cout<<msg.data;
@@ -130,6 +159,9 @@ Parameter:   __n2 Number of characters from str to use.
     setBatteryStatus(integer);
     std::string buffer= UGVControl::jSONFileStringObject();
     std::string strInteger= UGVControl::toString(integer);
+     //subscribeLooper=std::thread(&MainWindow::BatteryLooper,this);
+    //subscribeLooper.detach();
+    
     UGVControl::jSONFileEditorBattery(strInteger, buffer);
     
    
@@ -138,6 +170,17 @@ Parameter:   __n2 Number of characters from str to use.
    
    
 }
+        /*void UGVControl::subscriberLoop(){
+        while(status_pub.getNumSubscribers() == 0){
+		//std_msgs::String msg;
+		//msg.data = "64.0";
+		//ROS_INFO(to_string(msg.data));
+		//publish.publish(msg);
+		//ros::spinOnce();
+		ROS_ERROR("Waiting for subscriber");
+		sleep(10);
+}*/
+        
 
 
         void UGVControl::InitialSetup()
@@ -146,6 +189,7 @@ Parameter:   __n2 Number of characters from str to use.
             //batteryStatus= system("rostopic echo /status/charge_estimate");
           husky_pub = n.advertise<geometry_msgs::Twist>("/husky_velocity_controller/cmd_vel", 10);
           status_pub= n.advertise<std_msgs::String>("penis",10);
+          
           //subscribers
           //&UGVControl::statusCallBack()
           huskyStatusSubscriber = n.subscribe("/status", 1000, &UGVControl::statusCallBack, this);
