@@ -43,7 +43,7 @@ class UGVControl: public gcs::VehicleControl {
         //int getBatteryStatus();
         
         
-        void jSONFileEditorMissionStatus(std::string Stringer, std::string buffer);
+        void jSONFileEditorMissionStatus(std::string Stringer);
         void jSONFileEditorBattery(std::string Stringer, std::string buffer);
         std::string toString(int integer);
         std::string jSONFileStringObject();

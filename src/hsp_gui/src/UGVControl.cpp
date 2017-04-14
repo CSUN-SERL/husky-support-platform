@@ -110,26 +110,26 @@ Parameter:   __n2 Number of characters from str to use.
            //ROS_WARN_STREAM("integer: " << buffer);
         
         }
-        void jSONFileEditorMissionStatus(std::string Stringer, std::string buffer){
-        int index= buffer.find("mission_Status");
-        if (buffer[19]='f'){
+        void UGVControl::jSONFileEditorMissionStatus(std::string Stringer){
+        int index= UGVControl::jsonMsg.data.find("mission_Status");
+        if (UGVControl::jsonMsg.data[19]='f'){
           
-           buffer[19]='t';
-           buffer[20]='r';
-           buffer[21]='u';
-           buffer[22]='e';
-           buffer[23]=' ';
+           UGVControl::jsonMsg.data[19]='t';
+           UGVControl::jsonMsg.data[20]='r';
+           UGVControl::jsonMsg.data[21]='u';
+           UGVControl::jsonMsg.data[22]='e';
+           UGVControl::jsonMsg.data[23]=' ';
            
            //while(i<=23){
              //  buffer
            //}
         }
-        else if (buffer[19]='t'){
-         buffer[19]='f';
-           buffer[20]='a';
-           buffer[21]='l';
-           buffer[22]='s';
-           buffer[23]='e';
+        else if (UGVControl::jsonMsg.data[19]='t'){
+         UGVControl::jsonMsg.data[19]='f';
+           UGVControl::jsonMsg.data[20]='a';
+           UGVControl::jsonMsg.data[21]='l';
+           UGVControl::jsonMsg.data[22]='s';
+           UGVControl::jsonMsg.data[23]='e';
         }
            //add the chars of batery_percentage and the colon that follows
            index=index+20;
