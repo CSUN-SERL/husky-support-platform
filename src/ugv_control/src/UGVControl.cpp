@@ -1,6 +1,5 @@
 #include "UGVControl.h"
 
-
 UGVControl::UGVControl() {
     this->initiateAttributes();
     this->initiateObjects();
@@ -14,7 +13,7 @@ void UGVControl::initiateAttributes() {
 
     arrived = true;
     armed = false;
-    isOnMission = false;
+    onMission = false;
     forward = 0;
     rotate = 0;
     moveTimer = n.createTimer(ros::Duration(0.1), &UGVControl::move, this);
@@ -24,10 +23,12 @@ void UGVControl::initiateAttributes() {
     //eventTimer = n.createTimer(ros::Duration(2.0), &UGVControl::publishEvent, this);
     angleCalc = VectorAngleCalculator();
 }
-void UGVControl::BatteryPub(){
-    UGVControl::jSONFileEditorMissionStatus();
+
+void UGVControl::BatteryPub() {
+
     UGVControl::status_pub.publish(UGVControl::jsonMsg);
 }
+
 void UGVControl::setBatteryStatus(int battery){
       battery_percentage=battery;
 }
@@ -47,7 +48,7 @@ void UGVControl::setBatteryStatus(int battery){
              std::ifstream ifs("vehicleDoc.json");
              std::string content( (std::istreambuf_iterator<char>(ifs) ),
                        (std::istreambuf_iterator<char>()    ) );
-            std::cout<<content<<std::endl;
+            
             return content;
         
         }
@@ -112,6 +113,13 @@ Parameter:   __n2 Number of characters from str to use.
            UGVControl::BatteryPub();
 }
         void UGVControl::statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg){
+            int integer = (msg.get()->charge_estimate *100);
+    setBatteryStatus(integer);
+    std::string buffer= UGVControl::jSONFileStringObject();
+std::string strInteger= UGVControl::toString(integer);
+            
+        }
+
     //std::cout<<msg.data;
     /*batteryList[numberOfBatteryDisp]=msg.data*100;
     MainWindow::numberOfBatteryDisp++;
@@ -124,37 +132,21 @@ Parameter:   __n2 Number of characters from str to use.
         
         widget.batteryBar->setValue(average);
         numberOfBatteryDisp=0;
-    }
-    else{
-        numberOfBatteryDisp++;
-    }*/
-            
-    int integer = (msg.get()->charge_estimate *100);
-    setBatteryStatus(integer);
-    std::string buffer= UGVControl::jSONFileStringObject();
-    std::string strInteger= UGVControl::toString(integer);
-
-     //subscribeLooper=std::thread(&MainWindow::BatteryLooper,this);
-    //subscribeLooper.detach();
-    
-    UGVControl::jSONFileEditorBattery(strInteger, buffer);
-    
-   
-    //ROS_INFO("HELLO");
-    //ROS_WARN_STREAM("integer: " << integer);
-   
-   
+||||||| merged common ancestors
+void UGVControl::setBatteryStatus(int battery){
+      battery_percentage=battery;
 }
-        /*void UGVControl::subscriberLoop(){
-        while(status_pub.getNumSubscribers() == 0){
-		//std_msgs::String msg;
-		//msg.data = "64.0";
-		//ROS_INFO(to_string(msg.data));
-		//publish.publish(msg);
-		//ros::spinOnce();
-		ROS_ERROR("Waiting for subscriber");
-		sleep(10);
-}*/
+        
+        /*the overridden vehicle_control GetBattery();
+        int UGVControl::getBatteryStatus(){
+            return state.battery;
+            //return batteryStatus;
+        }*/
+      
+     
+    
+       
+
 void UGVControl::initiateObjects() {
     position = new Position();
     random_msgs = {"Hey", "Hi", "Hello", "Hell NO", "yep"};
@@ -163,42 +155,52 @@ void UGVControl::initiateObjects() {
 void UGVControl::initiatePublishers() {
     husky_pub = n.advertise<geometry_msgs::Twist>("/husky_velocity_controller/cmd_vel", 1000);
     pub_events = n.advertise<std_msgs::String>("/vehicle_events", 100);
-    status_pub= n.advertise<std_msgs::String>("/vehicle_events",10);
+    status_pub = n.advertise<std_msgs::String>("/vehicle_events", 10);
 }
 
 void UGVControl::initiateSubscribers() {
-UGVControl::huskyStatusSubscriber = n.subscribe("/status", 1000, &UGVControl::statusCallBack, this);
+    UGVControl::huskyStatusSubscriber = n.subscribe("/status", 1000, &UGVControl::statusCallBack, this);
 }
 
-void UGVControl::setMission(const std::vector<Point>& waypoints)
-{
+void UGVControl::setMission(const std::vector<Point>& waypoints) {
     this->waypoints = waypoints;
 }
 
-void UGVControl::startMission()
-{    
-    isOnMission = true;
+void UGVControl::startMission() {
+    jSONFileEditorMissionStatus();
+    onMission = true;
     currentWaypoint = 0;
     moveToNextWayPoint();
 }
 
-void UGVControl::stopMission()
-{    
+void UGVControl::resumeMission(){
+    moveToNextWayPoint();
+}
+
+void UGVControl::pauseMission() {
     this->stop();
+    if(currentWaypoint > 0){
+        currentWaypoint--;
+    }
 }
 
-void UGVControl::removeMission(){
+void UGVControl::cancelMission(){
+    this->stop();
+    removeMission();
+}
+
+void UGVControl::removeMission() {
     this->waypoints.clear();
-    isOnMission = false;
+    onMission = false;
 }
 
-void UGVControl::moveToNextWayPoint(){
-    if(currentWaypoint < this->waypoints.size()){
+void UGVControl::moveToNextWayPoint() {
+    if (currentWaypoint < this->waypoints.size()) {
         Point currentPoint = this->waypoints.at(currentWaypoint);
         ROS_WARN_STREAM("Next Point - X:" << currentPoint.x << " Y:" << currentPoint.y);
         currentWaypoint++;
         moveTo(currentPoint.x, currentPoint.y);
-    }else{
+    } else {
         removeMission();
     }
 }
@@ -222,18 +224,21 @@ void UGVControl::stop() {
     moveToTimer.stop();
 }
 
-bool UGVControl::arm(bool arm ) {
+bool UGVControl::arm(bool arm) {
     armed = arm;
     ROS_WARN_STREAM("Husky arm status: " << armed);
-    if(armed == false)
-    {
-        stop(); 
+    if (armed == false) {
+        stop();
     }
     return armed;
 }
 
 bool UGVControl::isArmed() {
     return armed;
+}
+
+bool UGVControl::isOnMission(){
+    return onMission;
 }
 
 bool UGVControl::hasArrived() {
@@ -262,6 +267,7 @@ void UGVControl::moveTo(double x, double y) {
 void UGVControl::autoMove(const ros::TimerEvent& event) {
     if (arrived) {
         stop();
+        jSONFileEditorMissionStatus();
         moveToNextWayPoint();
     } else {
         moveToDestintion();
@@ -298,8 +304,8 @@ bool UGVControl::isAligned() {
     Vector dVector = destination.getVector();
     double vectorsAngle = angleCalc.degree(&pVector, &dVector);
     double vecotrsAngleMag = abs(vectorsAngle);
-    double angularSpeed = calcAutoAngularSpeed(vecotrsAngleMag);        
-    
+    double angularSpeed = calcAutoAngularSpeed(vecotrsAngleMag);
+
     if (vecotrsAngleMag <= angularTolerance) {
         return true;
     } else {
@@ -316,15 +322,15 @@ bool UGVControl::isAligned() {
     }
 }
 
-double UGVControl::calcAutoAngularSpeed(double vectorsAngle){
+double UGVControl::calcAutoAngularSpeed(double vectorsAngle) {
     double angularSpeed;
-    if(vectorsAngle < 20.0 && vectorsAngle >= 10.0){
+    if (vectorsAngle < 20.0 && vectorsAngle >= 10.0) {
         angularSpeed = 0.3;
-    }else if(vectorsAngle < 10.0 && vectorsAngle >= 5.0){
+    } else if (vectorsAngle < 10.0 && vectorsAngle >= 5.0) {
         angularSpeed = 0.2;
-    }else if(vectorsAngle < 5.0){
+    } else if (vectorsAngle < 5.0) {
         angularSpeed = 0.1;
-    }else{
+    } else {
         angularSpeed = autoAngularSpeed;
     }
     return angularSpeed;
