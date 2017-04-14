@@ -5,7 +5,6 @@
 #include <QTextEdit>
 #include <QKeyEvent>
 #include <QTimer>
-#include <UGVControl.h>
 
 #define ANGULAR_ACCEL 0.5
 
@@ -16,6 +15,7 @@ linear(0),
 angular(0),
 it(nh),
 update_timer(new QTimer(this)),
+vr(new VoiceRecognition),
 model(new QStandardItemModel(this))
 {
     widget.setupUi(this);
@@ -27,7 +27,7 @@ model(new QStandardItemModel(this))
 
     sub_img = it.subscribe("/axis/image_raw_out", 60, &MainWindow::ImageCallback, this);
     
-    update_timer->start(0);
+    update_timer->start(30);
     
     //    batteryLooper = std::thread(&MainWindow::BatteryLooper, this);
     //    batteryLooper.detach();

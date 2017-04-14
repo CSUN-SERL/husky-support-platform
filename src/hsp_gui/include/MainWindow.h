@@ -13,6 +13,8 @@
 #include "UGVControl.h"
 #include <std_msgs/Float64.h> //use this to get battery status messages JG
 #include <thread>
+#include <lcar_msgs/lcar_msgs/ui_adapter.h>
+#include <voice_recognition/voice_recognition/VoiceRecognition.h>
 
 class MainWindow : public QMainWindow
 {
@@ -55,6 +57,7 @@ public slots:
 private:
     UGVControl *husky;
     Ui::MainWindow widget;
+
     ros::NodeHandle nh;
     ros::Publisher pub_cmd_vel;
     ros::Subscriber sub_events;
@@ -71,6 +74,8 @@ private:
     QStandardItemModel * model;
     
     std::vector<UGVControl::Point> waypoints;
+    
+    VoiceRecognition * vr;
     
     double linear_speed;
     
