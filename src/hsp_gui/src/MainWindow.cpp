@@ -23,6 +23,8 @@ model(new QStandardItemModel(this))
     this->husky = husky;
     this->numberOfBatteryDisp = 0;
 
+     batteryLooper=std::thread(&MainWindow::BatteryLooper,this);
+     batteryLooper.detach();
     this->initCoordModel();
 
     sub_img = it.subscribe("/axis/image_raw_out", 60, &MainWindow::ImageCallback, this);
@@ -75,6 +77,7 @@ model(new QStandardItemModel(this))
     connect(widget.Go_Button, &QPushButton::clicked,
             this, &MainWindow::OnGoClicked);
     
+    connect(widget.Get_Battery,&QPushButton::clicked,this, &MainWindow::OnBatteryClick);
 }
 
 MainWindow::~MainWindow() {
@@ -90,10 +93,24 @@ void MainWindow::BatteryLooper() {
     //        sleeper.sleep();
     //    }
     //    sleep(100);
+   int count = 0;
     while (1) {
         int integer = husky->GetBattery();
+        battery_array[count]=integer;
+        count++;
+        if(count==9){
+            for(int i=0;i<10;i++){
+               
         widget.batteryBar->setValue(integer);
+        count=0;
+            }
+        }
     }
+}
+void MainWindow::OnBatteryClick(){
+    husky->BatteryPub();
+    
+    
 }
 
 void MainWindow::closeEvent(QCloseEvent * e)

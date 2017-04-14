@@ -23,7 +23,132 @@ void UGVControl::initiateAttributes() {
     //eventTimer = n.createTimer(ros::Duration(2.0), &UGVControl::publishEvent, this);
     angleCalc = VectorAngleCalculator();
 }
-
+void UGVControl::BatteryPub(){
+    UGVControl::status_pub.publish(UGVControl::jsonMsg);
+}
+void UGVControl::setBatteryStatus(int battery){
+      battery_percentage=battery;
+}
+        
+        /*the overridden vehicle_control GetBattery();
+        int UGVControl::getBatteryStatus(){
+            return state.battery;
+            //return batteryStatus;
+        }*/
+        std::string UGVControl::jSONFileStringObject(){
+            
+//            std::ifstream file("include/vehicleDoc.txt");
+//            std::ostringstream tmp;
+//            
+//            tmp<<file.rdbuf();
+//            std::string s = tmp.str();
+             std::ifstream ifs("vehicleDoc.json");
+             std::string content( (std::istreambuf_iterator<char>(ifs) ),
+                       (std::istreambuf_iterator<char>()    ) );
+            std::cout<<content<<std::endl;
+            return content;
+        
+        }
+        std::string UGVControl::toString(int integer){
+        std::string strInteger=std::to_string(integer);
+        return strInteger;
+        }
+        
+        void UGVControl::jSONFileEditorBattery(std::string Stringer, std::string buffer){
+           int index= buffer.find("battery_Percentage");
+           //add the chars of batery_percentage and the colon that follows
+           index=index+20;
+           int batteryStatus= UGVControl::GetBattery();
+           std::string batteryString=std::to_string(batteryStatus);
+           //ROS_WARN_STREAM("integer: " << buffer);
+           /*Parameter:   __pos1 Index of first character to replace.
+Parameter:   __n1 Number of characters to be replaced.
+Parameter:   __str String to insert.
+Parameter:   __pos2 Index of first character of str to use.
+Parameter:   __n2 Number of characters from str to use.
+            * */
+           //buffer.replace(index,1,batteryString[0],1);
+           
+           //buffer.replace(index+1,1,batteryString[1],1);
+           buffer[index]=batteryString[0];
+           buffer[index+1]=batteryString[1];
+           //std_msgs::String buffer_msg;
+           UGVControl::jsonMsg.data=buffer;
+           //buffer_msg.data=buffer;
+           //UGVControl::jsonMsg.assign(buffer_msg);
+           //UGVControl::status_pub.publish(buffer_msg);
+           //ROS_WARN_STREAM("integer: " << buffer);
+        
+        }
+        void UGVControl::jSONFileEditorMissionStatus(std::string Stringer){
+        int index= UGVControl::jsonMsg.data.find("mission_Status");
+        if (UGVControl::jsonMsg.data[19]='f'){
+          
+           UGVControl::jsonMsg.data[19]='t';
+           UGVControl::jsonMsg.data[20]='r';
+           UGVControl::jsonMsg.data[21]='u';
+           UGVControl::jsonMsg.data[22]='e';
+           UGVControl::jsonMsg.data[23]=' ';
+           
+           //while(i<=23){
+             //  buffer
+           //}
+        }
+        else if (UGVControl::jsonMsg.data[19]='t'){
+         UGVControl::jsonMsg.data[19]='f';
+           UGVControl::jsonMsg.data[20]='a';
+           UGVControl::jsonMsg.data[21]='l';
+           UGVControl::jsonMsg.data[22]='s';
+           UGVControl::jsonMsg.data[23]='e';
+        }
+           //add the chars of batery_percentage and the colon that follows
+           index=index+20;
+           int batteryStatus= UGVControl::GetBattery();
+           std::string batteryString=std::to_string(batteryStatus);
+}
+        void UGVControl::statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg){
+    //std::cout<<msg.data;
+    /*batteryList[numberOfBatteryDisp]=msg.data*100;
+    MainWindow::numberOfBatteryDisp++;
+    double sum=0;
+    if(numberOfBatteryDisp==10){
+        for(int i=0;i<sizeof(batteryList);i++){
+            sum+=batteryList[i];
+    }
+        int average=std::round(sum/numberOfBatteryDisp);
+        
+        widget.batteryBar->setValue(average);
+        numberOfBatteryDisp=0;
+    }
+    else{
+        numberOfBatteryDisp++;
+    }*/
+            
+    int integer = (msg.get()->charge_estimate *100);
+    setBatteryStatus(integer);
+    std::string buffer= UGVControl::jSONFileStringObject();
+    std::string strInteger= UGVControl::toString(integer);
+     //subscribeLooper=std::thread(&MainWindow::BatteryLooper,this);
+    //subscribeLooper.detach();
+    
+    UGVControl::jSONFileEditorBattery(strInteger, buffer);
+    
+   
+    //ROS_INFO("HELLO");
+    //ROS_WARN_STREAM("integer: " << integer);
+   
+   
+}
+        /*void UGVControl::subscriberLoop(){
+        while(status_pub.getNumSubscribers() == 0){
+		//std_msgs::String msg;
+		//msg.data = "64.0";
+		//ROS_INFO(to_string(msg.data));
+		//publish.publish(msg);
+		//ros::spinOnce();
+		ROS_ERROR("Waiting for subscriber");
+		sleep(10);
+}*/
 void UGVControl::initiateObjects() {
     position = new Position();
     random_msgs = {"Hey", "Hi", "Hello", "Hell NO", "yep"};
@@ -32,10 +157,11 @@ void UGVControl::initiateObjects() {
 void UGVControl::initiatePublishers() {
     husky_pub = n.advertise<geometry_msgs::Twist>("/husky_velocity_controller/cmd_vel", 1000);
     pub_events = n.advertise<std_msgs::String>("/vehicle_events", 100);
+    status_pub= n.advertise<std_msgs::String>("/vehicle_events",10);
 }
 
 void UGVControl::initiateSubscribers() {
-
+UGVControl::huskyStatusSubscriber = n.subscribe("/status", 1000, &UGVControl::statusCallBack, this);
 }
 
 void UGVControl::setMission(const std::vector<Point>& waypoints)
