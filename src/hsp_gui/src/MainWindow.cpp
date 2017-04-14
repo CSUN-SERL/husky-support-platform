@@ -4,6 +4,7 @@
 
 #include <QTextEdit>
 #include <QKeyEvent>
+#include <QTimer>
 #include <UGVControl.h>
 
 #define ANGULAR_ACCEL 0.5
@@ -13,6 +14,8 @@ linear_scale(10), // was two // makes it so it goes further
 angular_scale(10), // was two and a comma 
 linear(0),
 angular(0),
+it(nh),
+update_timer(new QTimer(this)),
 model(new QStandardItemModel(this))
 {
     widget.setupUi(this);
@@ -24,6 +27,10 @@ model(new QStandardItemModel(this))
      batteryLooper.detach();
     this->initCoordModel();
 
+    sub_img = it.subscribe("/axis/image_raw_out", 60, &MainWindow::ImageCallback, this);
+    
+    update_timer->start(0);
+    
     //    batteryLooper = std::thread(&MainWindow::BatteryLooper, this);
     //    batteryLooper.detach();
 
@@ -31,6 +38,9 @@ model(new QStandardItemModel(this))
     this->onSpeedValueChanged(speed);
     connect(widget.slider_speed, &QSlider::valueChanged,
             this, &MainWindow::onSpeedValueChanged);
+    
+    connect(update_timer, &QTimer::timeout,
+            this, &MainWindow::onTimedUpdate);
     
     connect(widget.btn_up, &QPushButton::pressed,
             this, &MainWindow::OnUpClicked);
@@ -152,7 +162,7 @@ void MainWindow::ImageCallback(const sensor_msgs::ImageConstPtr& in) {
 
     QImage::Format f = QImage::Format_RGB888;
     QImage img(in->data.data(), in->width, in->height, in->step, f);
-    //    img = img.rgbSwapped();
+    img = img.rgbSwapped();
 
     QPixmap pic = QPixmap::fromImage(img);
 
@@ -160,7 +170,9 @@ void MainWindow::ImageCallback(const sensor_msgs::ImageConstPtr& in) {
     int h = widget.image_frame->height();
 
     pic = pic.scaled(w, h, Qt::KeepAspectRatio);
-    widget.image_frame->setPixmap(pic);
+
+    img_q.append(pic);
+//    widget.image_frame->setPixmap(pic);
 }
 //void MainWindow::statusCallBack(const std_msgs::Float64 msg){
 //std::cout<<msg.data;
@@ -197,6 +209,14 @@ void MainWindow::TranslateAndPublish() {
     pub_cmd_vel.publish(twist);
 
     linear = angular = 0;
+}
+
+void MainWindow::onTimedUpdate()
+{
+    if(img_q.length() > 0)
+    {
+        widget.image_frame->setPixmap(img_q.takeFirst());
+    }
 }
 
 void MainWindow::OnLeftClicked() {

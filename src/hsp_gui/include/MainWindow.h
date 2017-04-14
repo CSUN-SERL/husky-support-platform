@@ -38,6 +38,8 @@ public slots:
     
     void onSpeedValueChanged(int value);
     
+    void onTimedUpdate();
+    
     void OnLeftClicked();
     void OnRightClicked();
     void OnUpClicked();
@@ -59,6 +61,7 @@ private:
     ros::Subscriber sub_events;
     
     image_transport::Subscriber sub_img;
+    image_transport::ImageTransport it;
     std::thread batteryLooper;
     double linear,
            angular,
@@ -72,6 +75,10 @@ private:
     std::vector<UGVControl::Point> waypoints;
     
     double linear_speed;
+    
+    QVector<QPixmap> img_q;
+    
+    QTimer * update_timer;
     
     void TranslateAndPublish();
     
