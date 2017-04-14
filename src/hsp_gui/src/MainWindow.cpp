@@ -108,7 +108,7 @@ void MainWindow::BatteryLooper() {
               
             }
             integer=total/count;
-            widget.batteryBar->setValue(integer);
+            battery=integer;
         count=0;
         total=0;
         }

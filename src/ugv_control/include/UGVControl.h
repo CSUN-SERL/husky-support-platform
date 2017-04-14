@@ -28,11 +28,12 @@ public:
     void BatteryPub();
     std::string jSONFileStringObject();
     void jSONFileEditorBattery(std::string Stringer, std::string buffer);
-    void jSONFileEditorMissionStatus();
+
     void statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg);
     void setMission(const std::vector<Point>& waypoints);
     std::string toString(int integer);
-    
+    void jSONFileEditorMissionStatusFalse();
+    void jSONFileEditorMissionStatusTrue();
     void startMission();
     
     void pauseMission();
@@ -67,6 +68,8 @@ public:
     //        std::string jSONFileStringObject();
 
 private:
+    int missionStatus;
+    std::string buffer=UGVControl::jSONFileStringObject();
 
     std_msgs::String jsonMsg;
     int battery_percentage;

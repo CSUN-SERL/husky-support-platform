@@ -26,6 +26,7 @@ void UGVControl::initiateAttributes() {
 
 void UGVControl::BatteryPub() {
 
+
     UGVControl::status_pub.publish(UGVControl::jsonMsg);
 }
 
@@ -63,18 +64,11 @@ void UGVControl::setBatteryStatus(int battery){
            index=index+20;
            int batteryStatus= UGVControl::GetBattery();
            std::string batteryString=std::to_string(batteryStatus);
-           //ROS_WARN_STREAM("integer: " << buffer);
-           /*Parameter:   __pos1 Index of first character to replace.
-Parameter:   __n1 Number of characters to be replaced.
-Parameter:   __str String to insert.
-Parameter:   __pos2 Index of first character of str to use.
-Parameter:   __n2 Number of characters from str to use.
-            * */
-           //buffer.replace(index,1,batteryString[0],1);
-           
-           //buffer.replace(index+1,1,batteryString[1],1);
+          
+    
            buffer[index]=batteryString[0];
            buffer[index+1]=batteryString[1];
+           UGVControl::buffer=buffer;
            //std_msgs::String buffer_msg;
            UGVControl::jsonMsg.data=buffer;
            //buffer_msg.data=buffer;
@@ -83,65 +77,36 @@ Parameter:   __n2 Number of characters from str to use.
            //ROS_WARN_STREAM("integer: " << buffer);
         
         }
-        void UGVControl::jSONFileEditorMissionStatus(){
+        void UGVControl::jSONFileEditorMissionStatusTrue(){
+        int index= UGVControl::jsonMsg.data.find("mission_Status");
+        index=index+16;
+        UGVControl::jsonMsg.data.replace(index,1,"1");
+        }
+        void UGVControl::jSONFileEditorMissionStatusFalse(){
         int index= UGVControl::jsonMsg.data.find("mission_Status");
         
-        index=index+19;
-        if (UGVControl::jsonMsg.data[index]=='f'){
-          
-           UGVControl::jsonMsg.data[index+1]='t';
-           UGVControl::jsonMsg.data[index+2]='r';
-           UGVControl::jsonMsg.data[index+3]='u';
-           UGVControl::jsonMsg.data[index+4]='e';
-           UGVControl::jsonMsg.data[index+5]=' ';
-           
-           //while(i<=23){
-             //  buffer
-           //}
-        }
-        else if (UGVControl::jsonMsg.data[index]=='t'){
-         UGVControl::jsonMsg.data[index+1]='f';
-           UGVControl::jsonMsg.data[index+2]='a';
-           UGVControl::jsonMsg.data[index+3]='l';
-           UGVControl::jsonMsg.data[index+4]='s';
-           UGVControl::jsonMsg.data[index+5]='e';
-        }
+        index=index+16;
+        
+
+
+            UGVControl::jsonMsg.data.replace(index,1,"0");
+
+        UGVControl::buffer=jsonMsg.data;
            //add the chars of batery_percentage and the colon that follows
-           index=index+20;
-           int batteryStatus= UGVControl::GetBattery();
-           std::string batteryString=std::to_string(batteryStatus);
-           UGVControl::BatteryPub();
+
 }
         void UGVControl::statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg){
             int integer = (msg.get()->charge_estimate *100);
     setBatteryStatus(integer);
-    std::string buffer= UGVControl::jSONFileStringObject();
+    
 std::string strInteger= UGVControl::toString(integer);
+ UGVControl::jSONFileEditorBattery(strInteger, buffer);
+
+
             
         }
 
-    //std::cout<<msg.data;
-    /*batteryList[numberOfBatteryDisp]=msg.data*100;
-    MainWindow::numberOfBatteryDisp++;
-    double sum=0;
-    if(numberOfBatteryDisp==10){
-        for(int i=0;i<sizeof(batteryList);i++){
-            sum+=batteryList[i];
-    }
-        int average=std::round(sum/numberOfBatteryDisp);
-        
-        widget.batteryBar->setValue(average);
-        numberOfBatteryDisp=0;
-||||||| merged common ancestors
-void UGVControl::setBatteryStatus(int battery){
-      battery_percentage=battery;
-}
-        
-        /*the overridden vehicle_control GetBattery();
-        int UGVControl::getBatteryStatus(){
-            return state.battery;
-            //return batteryStatus;
-        }*/
+    
       
      
     
@@ -150,6 +115,7 @@ void UGVControl::setBatteryStatus(int battery){
 void UGVControl::initiateObjects() {
     position = new Position();
     random_msgs = {"Hey", "Hi", "Hello", "Hell NO", "yep"};
+  
 }
 
 void UGVControl::initiatePublishers() {
@@ -163,11 +129,12 @@ void UGVControl::initiateSubscribers() {
 }
 
 void UGVControl::setMission(const std::vector<Point>& waypoints) {
+            jSONFileEditorMissionStatusFalse();
     this->waypoints = waypoints;
 }
 
 void UGVControl::startMission() {
-    jSONFileEditorMissionStatus();
+
     onMission = true;
     currentWaypoint = 0;
     moveToNextWayPoint();
@@ -238,10 +205,12 @@ bool UGVControl::isArmed() {
 }
 
 bool UGVControl::isOnMission(){
+
     return onMission;
 }
 
 bool UGVControl::hasArrived() {
+    UGVControl::jSONFileEditorMissionStatusTrue();
     return arrived;
 }
 
@@ -267,7 +236,7 @@ void UGVControl::moveTo(double x, double y) {
 void UGVControl::autoMove(const ros::TimerEvent& event) {
     if (arrived) {
         stop();
-        jSONFileEditorMissionStatus();
+        jSONFileEditorMissionStatusTrue();
         moveToNextWayPoint();
     } else {
         moveToDestintion();
@@ -279,7 +248,7 @@ void UGVControl::moveToDestintion() {
     double desMag = dVector.mag; // Destination vector magnitude
     if (desMag < destinationTolerance) {
         arrived = true;
-        UGVControl::jSONFileEditorMissionStatus();
+        UGVControl::jSONFileEditorMissionStatusTrue();
     } else {
         if (initiallyAligned) crawl(autoLinearSpeed);
     }

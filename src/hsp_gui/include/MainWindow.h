@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(UGVControl *husky);
     virtual ~MainWindow();
-    
+    int battery;
     void ImageCallback(const sensor_msgs::ImageConstPtr& msg);
   // void statusCallBack(const std_msgs::Float64 msg);
     void UpdateBatteryBar(double batteryPercentage);
