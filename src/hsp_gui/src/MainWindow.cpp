@@ -5,6 +5,7 @@
 #include <QTextEdit>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QThread>
 
 #define ANGULAR_ACCEL 0.5
 
@@ -15,7 +16,7 @@ linear(0),
 angular(0),
 it(nh),
 update_timer(new QTimer(this)),
-vr(new VoiceRecognition),
+mission_paused(false),
 model(new QStandardItemModel(this))
 {
     widget.setupUi(this);
@@ -26,6 +27,8 @@ model(new QStandardItemModel(this))
      batteryLooper=std::thread(&MainWindow::BatteryLooper,this);
      batteryLooper.detach();
     this->initCoordModel();
+    this->initVR();
+    this->connectToUiAdapter();
 
     sub_img = it.subscribe("/axis/image_raw_out", 60, &MainWindow::ImageCallback, this);
     
@@ -99,11 +102,8 @@ void MainWindow::BatteryLooper() {
         battery_array[count]=integer;
         count++;
         if(count==9){
-            for(int i=0;i<10;i++){
-               
-        widget.batteryBar->setValue(integer);
-        count=0;
-            }
+                battery = integer;
+                count=0;
         }
     }
 }
@@ -134,6 +134,57 @@ void MainWindow::initCoordModel()
     connect (widget.btn_remove, &QPushButton::clicked,
                 this, &MainWindow::onBtnRemoveClicked);
 }
+
+void MainWindow::Arm(int v_id, bool value)
+{
+    husky->arm(value);
+    if(husky->isArmed())
+    {
+        widget.btn_arm->setText("Disarm");
+    }
+    else
+    {
+        widget.btn_arm->setText("Arm");
+    }
+    
+    mission_paused = false;
+    widget.Go_Button->setText("Start Mission");
+}
+
+void MainWindow::SetWayPoint(int, int lat, int lng, int)
+{
+    UGVControl::Point p;
+    p.x = lat;
+    p.y = lng;
+    std::vector<UGVControl::Point> vector;
+    vector.push_back(p);
+    husky->setMission(vector);
+    husky->startMission();
+}
+
+void MainWindow::PauseMission(int)
+{
+    if(husky->isOnMission())
+    {
+        husky->pauseMission();
+        mission_paused = true;
+    }
+}
+
+void MainWindow::ResumeMission(int v_id)
+{
+    if(husky->isOnMission())
+    {
+        husky->resumeMission();
+        mission_paused = false;
+    }
+}
+
+void MainWindow::CancelMission(int v_id)
+{
+    this->OnStopClicked();
+}
+
 
 void MainWindow::onBtnAddClicked()
 {
@@ -200,6 +251,37 @@ else{
 //widget.batteryBar(batteryPercentage);
 //}
 
+void MainWindow::connectToUiAdapter()
+{
+    gcs::UIAdapter * uia = gcs::UIAdapter::Instance();
+    
+    QObject::connect(uia, & gcs::UIAdapter::Arm,
+                                this, &MainWindow::Arm);
+    
+    QObject::connect(uia, &gcs::UIAdapter::SetWayPoint,
+                                this, &MainWindow::PauseMission);
+    
+    QObject::connect(uia, &gcs::UIAdapter::PauseMission,
+                                this, &MainWindow::ResumeMission);
+    
+    QObject::connect(uia,&gcs::UIAdapter::CancelMission,
+                                this, &MainWindow::CancelMission);
+}
+
+void MainWindow::initVR()
+{
+    vr_thread = new QThread(this);
+    
+    vr = new VoiceRecognition();
+    
+    vr->moveToThread(vr_thread);
+    
+    QObject::connect(vr_thread, &QThread::started,
+                                vr, &VoiceRecognition::run);
+    
+    vr_thread->start();
+}
+
 void MainWindow::TranslateAndPublish() {
     geometry_msgs::Twist twist;
     twist.angular.z = angular_scale * angular;
@@ -216,6 +298,8 @@ void MainWindow::onTimedUpdate()
     {
         widget.image_frame->setPixmap(img_q.takeFirst());
     }
+    
+    widget.batteryBar->setValue(battery);
 }
 
 void MainWindow::OnLeftClicked() {
@@ -262,23 +346,46 @@ void MainWindow::OnCloseClicked() {
 
 void MainWindow::OnGoClicked() // this will just make the turtle sim go out 10 spaces
 {
-    waypoints.clear();
-    for(int i = 0; i < model->rowCount(); i++)
-    {
-        UGVControl::Point p;
-        p.x = model->item(i, 0)->data(Qt::DisplayRole).toDouble();
-        p.y = model->item(i, 1)->data(Qt::DisplayRole).toDouble();
-        waypoints.push_back(p);
-    }
+    if(!husky->isArmed())
+        return;
     
-    husky->setMission(waypoints);
-    husky->startMission();
+    if(husky->isOnMission() && !mission_paused)
+    {// pause
+        husky->pauseMission();
+        widget.Go_Button->setText("Resume Mission");
+        mission_paused = true;
+    }
+    else if(husky->isOnMission() && mission_paused)
+    {// resume
+        husky->resumeMission();
+        widget.Go_Button->setText("Pause Mission");
+        mission_paused = false;
+    }
+    else // no mission, so start
+    {
+        waypoints.clear();
+        for(int i = 0; i < model->rowCount(); i++)
+        {
+            UGVControl::Point p;
+            p.x = model->item(i, 0)->data(Qt::DisplayRole).toDouble();
+            p.y = model->item(i, 1)->data(Qt::DisplayRole).toDouble();
+            waypoints.push_back(p);
+        }
+
+        husky->setMission(waypoints);
+        husky->startMission();
+    
+        widget.Go_Button->setText("Pause Mission");
+        mission_paused = false;
+    }
 }
 
 void MainWindow::OnStopClicked() {
     // if you use append itll just add instead of replace the string
     //widget.textEdit->setText("Stopping movement\n");
-    husky -> stop();
+    husky ->cancelMission();
+    widget.Go_Button->setText("Start Mission");
+    mission_paused = false;
     //linear = 0;
     //angular = 0;
     //this -> TranslateAndPublish();
@@ -301,6 +408,8 @@ void MainWindow::onArmDisarmClicked() {
         widget.btn_arm->setText("Arm");
     }
     
+    mission_paused = false;
+    widget.Go_Button->setText("Start Mission");
     
     //linear = lat;
     // this -> TranslateAndPublish();

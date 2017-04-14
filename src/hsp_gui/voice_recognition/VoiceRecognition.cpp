@@ -35,6 +35,9 @@ VoiceRecognition::~VoiceRecognition() {
 
 void VoiceRecognition::run()
 {
+    try
+    {
+    
     std::string path = ros::package::getPath("voice_recognition");
     path.append("/resources");
     std::cout << path << std::endl;
@@ -94,5 +97,10 @@ void VoiceRecognition::run()
         // QCoreApplication::processEvents();
 
       }  //while(!quit)
+    }
+    catch(std::exception e)
+    {
+        std::cout << "Voce Crashed =("  << std::endl;
+    }
 
 }

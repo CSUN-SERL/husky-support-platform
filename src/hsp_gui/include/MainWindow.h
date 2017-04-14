@@ -34,7 +34,15 @@ public:
     
     void initCoordModel();
     
+    
 public slots:
+    void Arm(int v_id, bool value);
+    void SetWayPoint(int v_id, int lat, int lng, int alt=0);
+    
+        void PauseMission(int v_id);
+        void ResumeMission(int v_id);
+        void CancelMission(int v_id);
+    
     void onBtnAddClicked();
     void onBtnRemoveClicked();
     
@@ -55,6 +63,11 @@ public slots:
     void OnReleased();
     
 private:
+    
+    QThread * vr_thread;
+    VoiceRecognition * vr;
+    
+    bool mission_paused;
     int battery_array[10];
     UGVControl *husky;
     Ui::MainWindow widget;
@@ -77,15 +90,17 @@ private:
     
     std::vector<UGVControl::Point> waypoints;
     
-    VoiceRecognition * vr;
-    
     double linear_speed;
     
     QVector<QPixmap> img_q;
     
     QTimer * update_timer;
     
+    int battery;
+    
     void TranslateAndPublish();
+    void connectToUiAdapter();
+    void initVR();
     
 };
 
