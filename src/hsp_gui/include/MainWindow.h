@@ -27,7 +27,7 @@ public:
     void keyPressEvent(QKeyEvent* e) override;
     void keyReleaseEvent(QKeyEvent* e)override;
     void  BatteryLooper();
-    
+    void OnBatteryClick();
     void closeEvent(QCloseEvent * e) override;
     
     void initCoordModel();
@@ -51,11 +51,13 @@ public slots:
     void OnReleased();
     
 private:
+    int battery_array[10];
     UGVControl *husky;
     Ui::MainWindow widget;
     ros::NodeHandle nh;
     ros::Publisher pub_cmd_vel;
     ros::Subscriber sub_events;
+    
     image_transport::Subscriber sub_img;
     std::thread batteryLooper;
     double linear,
