@@ -94,6 +94,15 @@ public:
         line_edit->setValidator(new QDoubleValidator(-2000, 2000, 2, line_edit));
         return line_edit;
     }
+    
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override
+    {
+        QLineEdit * line_edit = static_cast<QLineEdit*>(editor);
+        double val = line_edit->text().toDouble();
+        model->setData(index, val, Qt::DisplayRole);
+    }
+    
+    
 };
 
 #endif /* _MAINWINDOW_H */

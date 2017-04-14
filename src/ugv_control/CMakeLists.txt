@@ -30,7 +30,6 @@ catkin_package(
    src/Vector.cpp
    src/Destination.cpp
    src/VectorAngleCalculator.cpp
-   src/Demo.cpp
  )
 
 
@@ -100,6 +99,4 @@ add_definitions(${catkin_DEFINITIONS} -std=c++11)
 add_executable(mover src/mover.cpp)
 target_link_libraries(mover ${catkin_LIBRARIES} ${PROJECT_NAME})
 
-add_executable(position_tester src/position_tester.cpp)
-target_link_libraries(position_tester ${catkin_LIBRARIES} ${PROJECT_NAME})
 #add_dependencies(mover husky_generate_messages_cpp)

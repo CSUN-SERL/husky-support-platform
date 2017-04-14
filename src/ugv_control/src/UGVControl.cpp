@@ -1,5 +1,5 @@
 #include "UGVControl.h"
-#include "Demo.h"
+
 
 UGVControl::UGVControl() {
     this->initiateAttributes();
@@ -13,6 +13,7 @@ UGVControl::UGVControl() {
 void UGVControl::initiateAttributes() {
     arrived = true;
     armed = false;
+    isOnMission = false;
     forward = 0;
     rotate = 0;
     moveTimer = n.createTimer(ros::Duration(0.1), &UGVControl::move, this);
@@ -43,14 +44,31 @@ void UGVControl::setMission(const std::vector<Point>& waypoints)
 }
 
 void UGVControl::startMission()
-{
-     ROS_INFO_STREAM("Starting waypoint traversal");
+{    
+    isOnMission = true;
+    currentWaypoint = 0;
+    moveToNextWayPoint();
 }
 
 void UGVControl::stopMission()
-{
-    ROS_INFO_STREAM("Stopping waypoint traversal");
+{    
     this->stop();
+}
+
+void UGVControl::removeMission(){
+    this->waypoints.clear();
+    isOnMission = false;
+}
+
+void UGVControl::moveToNextWayPoint(){
+    if(currentWaypoint < this->waypoints.size()){
+        Point currentPoint = this->waypoints.at(currentWaypoint);
+        ROS_WARN_STREAM("Next Point - X:" << currentPoint.x << " Y:" << currentPoint.y);
+        currentWaypoint++;
+        moveTo(currentPoint.x, currentPoint.y);
+    }else{
+        removeMission();
+    }
 }
 
 void UGVControl::crawl(double f) {
@@ -68,7 +86,6 @@ void UGVControl::turn(double r) {
 void UGVControl::stop() {
     forward = 0;
     rotate = 0;
-    //armed = false;
     moveTimer.stop();
     moveToTimer.stop();
 }
@@ -113,6 +130,7 @@ void UGVControl::moveTo(double x, double y) {
 void UGVControl::autoMove(const ros::TimerEvent& event) {
     if (arrived) {
         stop();
+        moveToNextWayPoint();
     } else {
         moveToDestintion();
     }

@@ -35,7 +35,6 @@ public:
 
     void stop();
 
-    void moveTo(double x, double y);
 
     bool hasArrived();
 
@@ -63,6 +62,7 @@ private:
     bool initiallyAligned;
     bool arrived;
     bool armed;
+    bool isOnMission;
     ros::NodeHandle n;
     ros::Publisher husky_pub;
     ros::Publisher pub_events;
@@ -82,6 +82,8 @@ private:
     void initiateSubscribers();
 
     void move(const ros::TimerEvent& event);
+    
+    void moveTo(double x, double y);
 
     void autoMove(const ros::TimerEvent& event);
 
@@ -95,9 +97,17 @@ private:
 
     double calcAutoAngularSpeed(double vectorsAngle);
     
+    void removeMission();
+    
+    void moveToNextWayPoint();
+    
+    int currentWaypoint;
+    
     std::vector<std::string> random_msgs;
     
     std::vector<Point> waypoints;
+    
+    
 };
 
 #endif /* HUSKY_MOVER_H */

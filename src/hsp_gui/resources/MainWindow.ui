@@ -229,15 +229,16 @@ font: 75 12pt &quot;STIX&quot;;</string>
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 170, 127);
+         <string notr="true">background-color:green;
+color: rgb(240,240,240);
 font: 75 12pt &quot;STIX&quot;;
-color: rgb(0, 0, 0);</string>
+</string>
         </property>
         <property name="text">
          <string>Start Mission</string>
         </property>
         <property name="checkable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="autoRepeat">
          <bool>false</bool>
