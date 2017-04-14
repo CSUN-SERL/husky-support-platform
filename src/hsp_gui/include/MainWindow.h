@@ -53,7 +53,7 @@ public slots:
     void OnReleased();
     
 private:
-    int battery_array[10];
+    int battery_array[500];
     UGVControl *husky;
     Ui::MainWindow widget;
     ros::NodeHandle nh;

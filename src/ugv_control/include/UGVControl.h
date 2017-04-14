@@ -28,7 +28,7 @@ public:
     void BatteryPub();
     std::string jSONFileStringObject();
     void jSONFileEditorBattery(std::string Stringer, std::string buffer);
-    void jSONFileEditorMissionStatus(std::string Stringer);
+    void jSONFileEditorMissionStatus();
     void statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg);
     void setMission(const std::vector<Point>& waypoints);
     std::string toString(int integer);

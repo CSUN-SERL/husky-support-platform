@@ -94,16 +94,23 @@ void MainWindow::BatteryLooper() {
     //    }
     //    sleep(100);
    int count = 0;
+   int total=0;
+   
     while (1) {
         int integer = husky->GetBattery();
         battery_array[count]=integer;
         count++;
-        if(count==9){
-            for(int i=0;i<10;i++){
-               
-        widget.batteryBar->setValue(integer);
-        count=0;
+        
+        if(count==(sizeof(battery_array) / sizeof(battery_array[0]))-1){
+            for(int i=0;i<=count;i++){
+            total+=battery_array[i];
+
+              
             }
+            integer=total/count;
+            widget.batteryBar->setValue(integer);
+        count=0;
+        total=0;
         }
     }
 }
