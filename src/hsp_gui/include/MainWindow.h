@@ -13,8 +13,8 @@
 #include "UGVControl.h"
 #include <std_msgs/Float64.h> //use this to get battery status messages JG
 #include <thread>
-#include <lcar_msgs/lcar_msgs/ui_adapter.h>
-#include <voice_recognition/voice_recognition/VoiceRecognition.h>
+#include <lcar_msgs/ui_adapter.h>
+#include <voice_recognition/VoiceRecognition.h>
 
 class MainWindow : public QMainWindow
 {

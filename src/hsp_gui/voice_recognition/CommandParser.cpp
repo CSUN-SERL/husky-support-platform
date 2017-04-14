@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
-#include <lcar_msgs/lcar_msgs/ui_adapter.h>
+#include <lcar_msgs/ui_adapter.h>
 
 #define ever ;;
 
