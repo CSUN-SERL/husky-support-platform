@@ -81,6 +81,7 @@ void UGVControl::setBatteryStatus(int battery){
         int index= UGVControl::jsonMsg.data.find("mission_Status");
         index=index+16;
         UGVControl::jsonMsg.data.replace(index,1,"1");
+        UGVControl::buffer=jsonMsg.data;
         }
         void UGVControl::jSONFileEditorMissionStatusFalse(){
         int index= UGVControl::jsonMsg.data.find("mission_Status");
