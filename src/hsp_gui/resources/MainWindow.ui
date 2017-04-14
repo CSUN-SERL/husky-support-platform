@@ -18,7 +18,7 @@
     <item row="3" column="2">
      <widget class="QPushButton" name="Go_Button">
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+       <enum>Qt::StrongFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(85, 170, 127);
@@ -45,10 +45,7 @@ color: rgb(0, 0, 0);</string>
     <item row="2" column="2">
      <widget class="QSlider" name="horizontalSlider">
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
-      </property>
-      <property name="maximum">
-       <number>100</number>
+       <enum>Qt::StrongFocus</enum>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -58,7 +55,7 @@ color: rgb(0, 0, 0);</string>
     <item row="5" column="2">
      <widget class="QPushButton" name="stop_Button">
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+       <enum>Qt::StrongFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 85, 0);
@@ -1051,14 +1048,14 @@ font: 75 12pt &quot;STIX&quot;;</string>
       <item row="1" column="0">
        <widget class="QLineEdit" name="LatBox">
         <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
+         <enum>Qt::StrongFocus</enum>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="loc_Button">
         <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
+         <enum>Qt::StrongFocus</enum>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 170, 255);
@@ -1072,7 +1069,7 @@ font: 75 12pt &quot;STIX&quot;;</string>
       <item row="1" column="1">
        <widget class="QLineEdit" name="LongBox">
         <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
+         <enum>Qt::StrongFocus</enum>
         </property>
        </widget>
       </item>
