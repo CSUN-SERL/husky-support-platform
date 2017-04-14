@@ -1,0 +1,11 @@
+"vehicle":[
+ 	{
+		"model":"husky"
+		"id":"1"
+		"battery_Percentage":69 
+		"mission_Status":"false"
+  
+	}
+
+
+]

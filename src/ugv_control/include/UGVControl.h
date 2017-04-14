@@ -10,7 +10,8 @@
 #include "Destination.h"
 #include "VectorAngleCalculator.h"
 #include "Vector.h"
-
+#include <HuskyStatus.h>
+#include <fstream>
 
 class UGVControl {
 public:
@@ -23,9 +24,14 @@ public:
     UGVControl();
 
     ~UGVControl();
-    
+    void setBatteryStatus(int battery);
+    void BatteryPub();
+    std::string jSONFileStringObject();
+    void jSONFileEditorBattery(std::string Stringer, std::string buffer);
+    void jSONFileEditorMissionStatus(std::string Stringer);
+    void statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg);
     void setMission(const std::vector<Point>& waypoints);
-    
+    std::string toString(int integer);
     void startMission();
     void stopMission();
     
@@ -35,7 +41,6 @@ public:
 
     void stop();
 
-    void moveTo(double x, double y);
 
     bool hasArrived();
 
@@ -45,7 +50,7 @@ public:
 
     int GetBattery() {
         //todo dont hard code this
-        return -1;
+        return battery_percentage;
     };
 
     //        void jSONFileEditorMissionStatus(std::string Stringer, std::string buffer);
@@ -54,6 +59,9 @@ public:
     //        std::string jSONFileStringObject();
 
 private:
+
+    std_msgs::String jsonMsg;
+    int battery_percentage;
     double autoAngularSpeed = 0.4;
     double autoLinearSpeed = 0.2;
     double angularTolerance = 5.0;
@@ -63,9 +71,12 @@ private:
     bool initiallyAligned;
     bool arrived;
     bool armed;
+    bool isOnMission;
     ros::NodeHandle n;
+    ros::Subscriber huskyStatusSubscriber;
     ros::Publisher husky_pub;
     ros::Publisher pub_events;
+    ros::Publisher status_pub;
     ros::Timer moveTimer;
     ros::Timer moveToTimer;
     ros::Timer eventTimer;
@@ -82,6 +93,8 @@ private:
     void initiateSubscribers();
 
     void move(const ros::TimerEvent& event);
+    
+    void moveTo(double x, double y);
 
     void autoMove(const ros::TimerEvent& event);
 
@@ -95,9 +108,17 @@ private:
 
     double calcAutoAngularSpeed(double vectorsAngle);
     
+    void removeMission();
+    
+    void moveToNextWayPoint();
+    
+    int currentWaypoint;
+    
     std::vector<std::string> random_msgs;
     
     std::vector<Point> waypoints;
+    
+    
 };
 
 #endif /* HUSKY_MOVER_H */

@@ -29,7 +29,7 @@ public:
     void keyPressEvent(QKeyEvent* e) override;
     void keyReleaseEvent(QKeyEvent* e)override;
     void  BatteryLooper();
-    
+    void OnBatteryClick();
     void closeEvent(QCloseEvent * e) override;
     
     void initCoordModel();
@@ -55,12 +55,14 @@ public slots:
     void OnReleased();
     
 private:
+    int battery_array[10];
     UGVControl *husky;
     Ui::MainWindow widget;
 
     ros::NodeHandle nh;
     ros::Publisher pub_cmd_vel;
     ros::Subscriber sub_events;
+    
     image_transport::Subscriber sub_img;
     image_transport::ImageTransport it;
     std::thread batteryLooper;
@@ -99,6 +101,15 @@ public:
         line_edit->setValidator(new QDoubleValidator(-2000, 2000, 2, line_edit));
         return line_edit;
     }
+    
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override
+    {
+        QLineEdit * line_edit = static_cast<QLineEdit*>(editor);
+        double val = line_edit->text().toDouble();
+        model->setData(index, val, Qt::DisplayRole);
+    }
+    
+    
 };
 
 #endif /* _MAINWINDOW_H */

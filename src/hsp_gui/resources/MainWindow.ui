@@ -41,171 +41,6 @@
       </item>
      </layout>
     </item>
-    <item row="14" column="3" rowspan="2">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="3" column="3" alignment="Qt::AlignTop">
-       <widget class="QPushButton" name="btn_down">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
-        </property>
-        <property name="text">
-         <string>v</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="autoRepeat">
-         <bool>false</bool>
-        </property>
-        <property name="autoRepeatDelay">
-         <number>0</number>
-        </property>
-        <property name="autoRepeatInterval">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4" alignment="Qt::AlignLeft">
-       <widget class="QPushButton" name="btn_right">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>&gt;</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="autoRepeat">
-         <bool>false</bool>
-        </property>
-        <property name="autoRepeatDelay">
-         <number>0</number>
-        </property>
-        <property name="autoRepeatInterval">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2" alignment="Qt::AlignRight">
-       <widget class="QPushButton" name="btn_left">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>&lt;</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="autoRepeat">
-         <bool>false</bool>
-        </property>
-        <property name="autoRepeatDelay">
-         <number>0</number>
-        </property>
-        <property name="autoRepeatInterval">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3" alignment="Qt::AlignBottom">
-       <widget class="QPushButton" name="btn_up">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
-        </property>
-        <property name="text">
-         <string>^</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-        <property name="autoRepeat">
-         <bool>false</bool>
-        </property>
-        <property name="autoRepeatDelay">
-         <number>0</number>
-        </property>
-        <property name="autoRepeatInterval">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="3">
-     <widget class="QPushButton" name="btn_arm">
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Arm</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="1">
-     <widget class="QLabel" name="image_frame">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>1</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>100</width>
-        <height>100</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="3">
-     <widget class="QTableView" name="tablev_coords">
-      <property name="verticalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
-      </property>
-      <property name="horizontalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
-      </property>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-     </widget>
-    </item>
-    <item row="7" column="3">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Mission Waypoints</string>
-      </property>
-     </widget>
-    </item>
     <item row="4" column="3">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
@@ -229,15 +64,16 @@ font: 75 12pt &quot;STIX&quot;;</string>
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 170, 127);
+         <string notr="true">background-color:green;
+color: rgb(240,240,240);
 font: 75 12pt &quot;STIX&quot;;
-color: rgb(0, 0, 0);</string>
+</string>
         </property>
         <property name="text">
          <string>Start Mission</string>
         </property>
         <property name="checkable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="autoRepeat">
          <bool>false</bool>
@@ -692,6 +528,189 @@ font: 75 12pt &quot;STIX&quot;;</string>
       </property>
      </widget>
     </item>
+    <item row="14" column="3" rowspan="2">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="3" column="3" alignment="Qt::AlignTop">
+       <widget class="QPushButton" name="btn_down">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text">
+         <string>v</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>0</number>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4" alignment="Qt::AlignLeft">
+       <widget class="QPushButton" name="btn_right">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>0</number>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" alignment="Qt::AlignRight">
+       <widget class="QPushButton" name="btn_left">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>0</number>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" alignment="Qt::AlignBottom">
+       <widget class="QPushButton" name="btn_up">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text">
+         <string>^</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>0</number>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="7" column="3">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Mission Waypoints</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="3">
+     <widget class="QTableView" name="tablev_coords">
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="horizontalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+     </widget>
+    </item>
+    <item row="8" column="3">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="btn_add">
+        <property name="text">
+         <string>Add</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_remove">
+        <property name="text">
+         <string>Remove</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="3">
+     <widget class="QPushButton" name="btn_arm">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Arm</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QLabel" name="image_frame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>1</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
     <item row="17" column="1" colspan="3">
      <widget class="QProgressBar" name="batteryBar">
       <property name="palette">
@@ -1123,23 +1142,15 @@ font: 75 12pt &quot;STIX&quot;;</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="3">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPushButton" name="btn_add">
-        <property name="text">
-         <string>Add</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_remove">
-        <property name="text">
-         <string>Remove</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="12" column="0">
+     <widget class="QPushButton" name="Get_Battery">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(33, 218, 255)</string>
+      </property>
+      <property name="text">
+       <string>Get Battery Status</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

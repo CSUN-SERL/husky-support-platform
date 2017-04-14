@@ -23,6 +23,8 @@ model(new QStandardItemModel(this))
     this->husky = husky;
     this->numberOfBatteryDisp = 0;
 
+     batteryLooper=std::thread(&MainWindow::BatteryLooper,this);
+     batteryLooper.detach();
     this->initCoordModel();
 
     sub_img = it.subscribe("/axis/image_raw_out", 60, &MainWindow::ImageCallback, this);
@@ -75,6 +77,7 @@ model(new QStandardItemModel(this))
     connect(widget.Go_Button, &QPushButton::clicked,
             this, &MainWindow::OnGoClicked);
     
+    connect(widget.Get_Battery,&QPushButton::clicked,this, &MainWindow::OnBatteryClick);
 }
 
 MainWindow::~MainWindow() {
@@ -90,10 +93,24 @@ void MainWindow::BatteryLooper() {
     //        sleeper.sleep();
     //    }
     //    sleep(100);
+   int count = 0;
     while (1) {
         int integer = husky->GetBattery();
+        battery_array[count]=integer;
+        count++;
+        if(count==9){
+            for(int i=0;i<10;i++){
+               
         widget.batteryBar->setValue(integer);
+        count=0;
+            }
+        }
     }
+}
+void MainWindow::OnBatteryClick(){
+    husky->BatteryPub();
+    
+    
 }
 
 void MainWindow::closeEvent(QCloseEvent * e)
@@ -141,7 +158,6 @@ void MainWindow::onSpeedValueChanged(int value)
 }
 
 void MainWindow::ImageCallback(const sensor_msgs::ImageConstPtr& in) {
-    ROS_WARN_STREAM("in image callback");
 
     QImage::Format f = QImage::Format_RGB888;
     QImage img(in->data.data(), in->width, in->height, in->step, f);
@@ -246,23 +262,15 @@ void MainWindow::OnCloseClicked() {
 
 void MainWindow::OnGoClicked() // this will just make the turtle sim go out 10 spaces
 {
-    // ROS_WARN_STREAM("in On Go Clicked will go forth 10 spaces");
-    //widget.textEdit->setText("Will go forward 10 spaces\n");
-    //husky -> crawl((double)ACCEL/2);
-    //widget.textEdit->setText("Will go backwards 5 spaces\n");
-    //husky -> crawl(-5);
-    //linear = 10;
-    //angular = 10;
-    //this -> TranslateAndPublish();
-    
     waypoints.clear();
     for(int i = 0; i < model->rowCount(); i++)
     {
         UGVControl::Point p;
-        p.x = model->item(i, 0)->data().toDouble();
-        p.y = model->item(i, 1)->data().toDouble();
+        p.x = model->item(i, 0)->data(Qt::DisplayRole).toDouble();
+        p.y = model->item(i, 1)->data(Qt::DisplayRole).toDouble();
         waypoints.push_back(p);
     }
+    
     husky->setMission(waypoints);
     husky->startMission();
 }
@@ -310,26 +318,28 @@ void MainWindow::onArmDisarmClicked() {
 //Can be modified to take in more keys using additional else if statements.
 
 void MainWindow::keyPressEvent(QKeyEvent* e) {
-    QMainWindow::keyPressEvent(e);
+    //QMainWindow::keyPressEvent(e);
 
     if (e->key() == Qt::Key_Left) {
-        this->OnLeftClicked();
+        MainWindow::OnLeftClicked();
     } else if (e->key() == Qt::Key_Up) {
-        this->OnUpClicked();
+        MainWindow::OnUpClicked();
     } else if (e->key() == Qt::Key_Right) {
-        this->OnRightClicked();
+        MainWindow::OnRightClicked();
     } else if (e->key() == Qt::Key_Down) {
-        this->OnDownClicked();
+        MainWindow::OnDownClicked();
     }
-    e->accept();
+    //e->accept();
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* e) {
+    if(e->isAutoRepeat()) return;
     if (e->key() == Qt::Key_Left ||
         e->key() == Qt::Key_Up ||
         e->key() == Qt::Key_Right ||
         e->key() == Qt::Key_Down
     ){
+        ROS_INFO_STREAM("Releasing an arrow key");
         husky -> stop();
     } 
 
