@@ -28,12 +28,18 @@ public:
     void BatteryPub();
     std::string jSONFileStringObject();
     void jSONFileEditorBattery(std::string Stringer, std::string buffer);
-    void jSONFileEditorMissionStatus(std::string Stringer);
+    void jSONFileEditorMissionStatus();
     void statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg);
     void setMission(const std::vector<Point>& waypoints);
     std::string toString(int integer);
+    
     void startMission();
-    void stopMission();
+    
+    void pauseMission();
+    
+    void resumeMission();
+    
+    void cancelMission();
     
     void crawl(double f);
 
@@ -48,6 +54,8 @@ public:
     
     bool isArmed();
 
+    bool isOnMission();
+    
     int GetBattery() {
         //todo dont hard code this
         return battery_percentage;
@@ -71,7 +79,7 @@ private:
     bool initiallyAligned;
     bool arrived;
     bool armed;
-    bool isOnMission;
+    bool onMission;
     ros::NodeHandle n;
     ros::Subscriber huskyStatusSubscriber;
     ros::Publisher husky_pub;
