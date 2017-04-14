@@ -6,25 +6,30 @@
 #include <QKeyEvent>
 #include <UGVControl.h>
 
-#define ACCEL 0.5
+#define ANGULAR_ACCEL 0.5
 
 MainWindow::MainWindow(UGVControl *husky) :
 linear_scale(10), // was two // makes it so it goes further
 angular_scale(10), // was two and a comma 
 linear(0),
-angular(0)
+angular(0),
+model(new QStandardItemModel(this))
 {
     widget.setupUi(this);
 
     this->husky = husky;
     this->numberOfBatteryDisp = 0;
 
-    widget.LatBox->setEnabled(true);
-    widget.LongBox->setEnabled(true);
+    this->initCoordModel();
 
     //    batteryLooper = std::thread(&MainWindow::BatteryLooper, this);
     //    batteryLooper.detach();
 
+    int speed = widget.slider_speed->value();
+    this->onSpeedValueChanged(speed);
+    connect(widget.slider_speed, &QSlider::valueChanged,
+            this, &MainWindow::onSpeedValueChanged);
+    
     connect(widget.btn_up, &QPushButton::pressed,
             this, &MainWindow::OnUpClicked);
     connect(widget.btn_up, &QPushButton::released,
@@ -51,18 +56,15 @@ angular(0)
     connect(widget.stop_Button, &QPushButton::clicked,
             this, &MainWindow::OnStopClicked);
 
-    connect(widget.loc_Button, &QPushButton::pressed,
-            this, &MainWindow::loc_ButtonClicked);
-    connect(widget.loc_Button, &QPushButton::released,
-            this, &MainWindow::OnReleased);
+    connect(widget.btn_arm, &QPushButton::clicked,
+            this, &MainWindow::onArmDisarmClicked);
 
     //    connect(widget.AutoButton, &QPushButton::clicked,
     //            this,&MainWindow::autoClicked);
 
     connect(widget.Go_Button, &QPushButton::clicked,
-            this, &MainWindow::onCoordinatesSubmited);
-
-    widget.textEdit->setText("Messages here\n");
+            this, &MainWindow::OnGoClicked);
+    
 }
 
 MainWindow::~MainWindow() {
@@ -82,6 +84,50 @@ void MainWindow::BatteryLooper() {
         int integer = husky->GetBattery();
         widget.batteryBar->setValue(integer);
     }
+}
+
+void MainWindow::closeEvent(QCloseEvent * e)
+{
+    husky->arm(false);
+    QMainWindow::closeEvent(e);
+    e->accept();
+}
+
+void MainWindow::initCoordModel()
+{
+    QStringList headers({"X", "Y"});
+    model->setHorizontalHeaderLabels(headers);
+    widget.tablev_coords->setModel(model);
+    
+    widget.tablev_coords->setItemDelegate(new DoubleValidatorDelegate(this));
+    
+    connect(widget.btn_add, &QPushButton::clicked,
+                this, &MainWindow::onBtnAddClicked);
+    
+    connect (widget.btn_remove, &QPushButton::clicked,
+                this, &MainWindow::onBtnRemoveClicked);
+}
+
+void MainWindow::onBtnAddClicked()
+{
+    QList<QStandardItem*> row({new QStandardItem, new QStandardItem});
+    model->appendRow(row);
+}
+
+void MainWindow::onBtnRemoveClicked()
+{
+    int row_count = model->rowCount();
+    if(row_count > 1)
+    {
+        model->removeRow(row_count - 1 );
+    }
+}
+
+void MainWindow::onSpeedValueChanged(int value)
+{
+    linear_speed = (double)(value/10.0);
+    ROS_INFO_STREAM("Linear Speed: " << linear_speed);
+    widget.lbl_linear_speed->setText("Linear Speed: " + QString::number(linear_speed));
 }
 
 void MainWindow::ImageCallback(const sensor_msgs::ImageConstPtr& in) {
@@ -137,53 +183,73 @@ void MainWindow::TranslateAndPublish() {
 }
 
 void MainWindow::OnLeftClicked() {
-    widget.textEdit->setText("Moving husky to the left. \n");
-    husky->arm();
-    husky -> turn(-ACCEL);
+    if(husky->isArmed())
+        husky -> turn(ANGULAR_ACCEL);
 }
 
 void MainWindow::OnReleased() {
-    widget.textEdit->append("Releasing the button\n");
+    //widget.textEdit->append("Releasing the button\n");
     husky -> stop();
 }
 
 void MainWindow::OnRightClicked() {
-    widget.textEdit->setText("Moving husky to the right. \n");
-    husky->arm();
-    husky -> turn(ACCEL);
+    //widget.textEdit->setText("Moving husky to the right. \n");
+    if(husky->isArmed())
+        husky -> turn(-ANGULAR_ACCEL);
 }
 
 void MainWindow::OnUpClicked() {
-    widget.textEdit->setText("Moving husky up. \n");
-    husky->arm();
-    husky -> crawl((double) ACCEL / 2);
+    //widget.textEdit->setText("Moving husky up. \n");
+    ROS_INFO_STREAM("Up Clicked: Husky Armed status" << husky->isArmed());
+    ROS_INFO_STREAM("linear_speed: " << linear_speed);
+   if(husky->isArmed())
+       husky -> crawl(linear_speed);
 }
 
 void MainWindow::OnDownClicked() {
-    widget.textEdit->setText("Moving husky down. \n");
-    husky->arm();
-    husky -> crawl((double) (-ACCEL / 2));
+    //widget.textEdit->setText("Moving husky down. \n");
+    if(husky->isArmed())
+        husky->crawl(-linear_speed);
 }
 
 void MainWindow::OnCloseClicked() {
-    this ->close();
+    husky->arm(false);
+    if(!husky->isArmed())
+    {
+        this ->close();
+    }
+    else
+    {
+        ROS_ERROR_STREAM("ERROR unable to disarm Husky");
+    }
 }
 
 void MainWindow::OnGoClicked() // this will just make the turtle sim go out 10 spaces
 {
     // ROS_WARN_STREAM("in On Go Clicked will go forth 10 spaces");
-    widget.textEdit->setText("Will go forward 10 spaces\n");
+    //widget.textEdit->setText("Will go forward 10 spaces\n");
     //husky -> crawl((double)ACCEL/2);
     //widget.textEdit->setText("Will go backwards 5 spaces\n");
     //husky -> crawl(-5);
     //linear = 10;
     //angular = 10;
     //this -> TranslateAndPublish();
+    
+    waypoints.clear();
+    for(int i = 0; i < model->rowCount(); i++)
+    {
+        UGVControl::Point p;
+        p.x = model->item(i, 0)->data().toDouble();
+        p.y = model->item(i, 1)->data().toDouble();
+        waypoints.push_back(p);
+    }
+    husky->setMission(waypoints);
+    husky->startMission();
 }
 
 void MainWindow::OnStopClicked() {
     // if you use append itll just add instead of replace the string
-    widget.textEdit->setText("Stopping movement\n");
+    //widget.textEdit->setText("Stopping movement\n");
     husky -> stop();
     //linear = 0;
     //angular = 0;
@@ -192,16 +258,22 @@ void MainWindow::OnStopClicked() {
 
 // testing the input system
 
-void MainWindow::loc_ButtonClicked() {
+void MainWindow::onArmDisarmClicked() {
     //tring text;
     //xt -> 
-    widget.textEdit->setText("Moving to location. \n");
-    double lat = 0;
-    double longitude = 0;
-    lat = widget.LatBox -> text().toDouble();
-    longitude = widget.LongBox -> text().toDouble();
-    husky -> crawl(lat);
-    husky -> turn(longitude);
+    //rwidget.textEdit->setText("Moving to location. \n");
+    bool disarm = widget.btn_arm->isChecked();
+    husky->arm(disarm);
+    if(husky->isArmed())
+    {
+        widget.btn_arm->setText("Disarm");
+    }
+    else
+    {
+        widget.btn_arm->setText("Arm");
+    }
+    
+    
     //linear = lat;
     // this -> TranslateAndPublish();
     // angular = longitude;
@@ -242,19 +314,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent* e) {
     } 
 
     e->accept();
-}
-
-void MainWindow::onCoordinatesSubmited() {
-    bool ok;
-    double lat = widget.LatBox->text().toDouble(&ok);
-    if (!ok)
-        return;
-
-    double lng = widget.LongBox->text().toDouble(&ok);
-    if (!ok)
-        return;
-    husky->arm();
-    husky->moveTo(lat, lng);
 }
 
 //        void UGVControl::jSONFileEditorBattery(std::string Stringer, std::string buffer){

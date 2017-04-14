@@ -3,12 +3,17 @@
 #define _MAINWINDOW_H
 
 #include "ui_MainWindow.h"
+#include <QLineEdit>
+#include <QDoubleValidator>
+#include <QStandardItemModel>
+#include <QItemDelegate>
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h> // using this to get the messages from usb cam
 #include <image_transport/image_transport.h> // need this to convert or transport the images
 #include "UGVControl.h"
 #include <std_msgs/Float64.h> //use this to get battery status messages JG
 #include <thread>
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -23,7 +28,16 @@ public:
     void keyReleaseEvent(QKeyEvent* e)override;
     void  BatteryLooper();
     
+    void closeEvent(QCloseEvent * e) override;
+    
+    void initCoordModel();
+    
 public slots:
+    void onBtnAddClicked();
+    void onBtnRemoveClicked();
+    
+    void onSpeedValueChanged(int value);
+    
     void OnLeftClicked();
     void OnRightClicked();
     void OnUpClicked();
@@ -32,11 +46,9 @@ public slots:
     void OnGoClicked();
     void OnStopClicked();
     //test
-    void loc_ButtonClicked();
+    void onArmDisarmClicked();
     //void autoClicked();
     void OnReleased();
-        
-    void onCoordinatesSubmited();
     
 private:
     UGVControl *husky;
@@ -52,7 +64,29 @@ private:
            angular_scale;
     int numberOfBatteryDisp;
     int batteryList[10];
+    
+    QStandardItemModel * model;
+    
+    std::vector<UGVControl::Point> waypoints;
+    
+    double linear_speed;
+    
     void TranslateAndPublish();
+    
+};
+
+class DoubleValidatorDelegate : public QItemDelegate
+{
+public:
+    DoubleValidatorDelegate(QObject * parent) : 
+    QItemDelegate(parent) {};
+    
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+    {
+        QLineEdit * line_edit = new QLineEdit(parent);
+        line_edit->setValidator(new QDoubleValidator(-2000, 2000, 2, line_edit));
+        return line_edit;
+    }
 };
 
 #endif /* _MAINWINDOW_H */

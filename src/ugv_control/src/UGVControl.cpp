@@ -19,7 +19,7 @@ void UGVControl::initiateAttributes() {
     moveTimer.stop();
     moveToTimer = n.createTimer(ros::Duration(0.1), &UGVControl::autoMove, this);
     moveToTimer.stop();
-    eventTimer = n.createTimer(ros::Duration(2.0), &UGVControl::publishEvent, this);
+    //eventTimer = n.createTimer(ros::Duration(2.0), &UGVControl::publishEvent, this);
     angleCalc = VectorAngleCalculator();
 }
 
@@ -37,6 +37,22 @@ void UGVControl::initiateSubscribers() {
 
 }
 
+void UGVControl::setMission(const std::vector<Point>& waypoints)
+{
+    this->waypoints = waypoints;
+}
+
+void UGVControl::startMission()
+{
+     ROS_INFO_STREAM("Starting waypoint traversal");
+}
+
+void UGVControl::stopMission()
+{
+    ROS_INFO_STREAM("Stopping waypoint traversal");
+    this->stop();
+}
+
 void UGVControl::crawl(double f) {
     if (!armed) return;
     forward = f;
@@ -52,13 +68,18 @@ void UGVControl::turn(double r) {
 void UGVControl::stop() {
     forward = 0;
     rotate = 0;
-    armed = false;
+    //armed = false;
     moveTimer.stop();
     moveToTimer.stop();
 }
 
-bool UGVControl::arm() {
-    armed = true;
+bool UGVControl::arm(bool arm ) {
+    armed = arm;
+    ROS_WARN_STREAM("Husky arm status: " << armed);
+    if(armed == false)
+    {
+        stop(); 
+    }
     return armed;
 }
 
@@ -82,7 +103,7 @@ void UGVControl::move(const ros::TimerEvent& event) {
 }
 
 void UGVControl::moveTo(double x, double y) {
-    if(!armed) return;
+    if (!armed) return;
     arrived = false;
     initiallyAligned = false;
     destination = Destination(x, y, position);
@@ -98,14 +119,12 @@ void UGVControl::autoMove(const ros::TimerEvent& event) {
 }
 
 void UGVControl::moveToDestintion() {
-    if (initiallyAligned) {
-        Vector dVector = destination.getVector();
-        double desMag = dVector.mag; // Destination vector magnitude
-        if (desMag < destinationTolerance) {
-            arrived = true;
-        } else {
-            crawl(autoLinearSpeed);
-        }
+    Vector dVector = destination.getVector();
+    double desMag = dVector.mag; // Destination vector magnitude
+    if (desMag < destinationTolerance) {
+        arrived = true;
+    } else {
+        if (initiallyAligned) crawl(autoLinearSpeed);
     }
     align();
 }
@@ -126,18 +145,38 @@ void UGVControl::align() {
 bool UGVControl::isAligned() {
     Vector pVector = position->getVector();
     Vector dVector = destination.getVector();
-    double angleCheck = angleCalc.degree(&pVector, &dVector);
-
-    if (abs(angleCheck) <= angularTolerance) {
+    double vectorsAngle = angleCalc.degree(&pVector, &dVector);
+    double vecotrsAngleMag = abs(vectorsAngle);
+    double angularSpeed = calcAutoAngularSpeed(vecotrsAngleMag);        
+    
+    if (vecotrsAngleMag <= angularTolerance) {
         return true;
     } else {
-        if (angleCheck > 0.0) {
-            turn(-1.0 * autoAngularSpeed);
+        if (dVector.mag < 200) {
+            forward = 0.0;
+            initiallyAligned = false;
+        }
+        if (vectorsAngle > 0.0) {
+            turn(-1.0 * angularSpeed);
         } else {
-            turn(autoAngularSpeed);
+            turn(angularSpeed);
         }
         return false;
     }
+}
+
+double UGVControl::calcAutoAngularSpeed(double vectorsAngle){
+    double angularSpeed;
+    if(vectorsAngle < 20.0 && vectorsAngle >= 10.0){
+        angularSpeed = 0.3;
+    }else if(vectorsAngle < 10.0 && vectorsAngle >= 5.0){
+        angularSpeed = 0.2;
+    }else if(vectorsAngle < 5.0){
+        angularSpeed = 0.1;
+    }else{
+        angularSpeed = autoAngularSpeed;
+    }
+    return angularSpeed;
 }
 
 UGVControl::~UGVControl() {

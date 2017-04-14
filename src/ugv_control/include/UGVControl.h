@@ -11,12 +11,24 @@
 #include "VectorAngleCalculator.h"
 #include "Vector.h"
 
+
 class UGVControl {
 public:
+    struct Point
+    {
+        double x;
+        double y;
+    };
+    
     UGVControl();
 
     ~UGVControl();
-
+    
+    void setMission(const std::vector<Point>& waypoints);
+    
+    void startMission();
+    void stopMission();
+    
     void crawl(double f);
 
     void turn(double r);
@@ -27,7 +39,7 @@ public:
 
     bool hasArrived();
 
-    bool arm();
+    bool arm(bool arm);
     
     bool isArmed();
 
@@ -45,7 +57,7 @@ private:
     double autoAngularSpeed = 0.4;
     double autoLinearSpeed = 0.2;
     double angularTolerance = 5.0;
-    double destinationTolerance = 10.0;
+    double destinationTolerance = 50.0;
     double forward;
     double rotate;
     bool initiallyAligned;
@@ -81,7 +93,11 @@ private:
 
     bool isAligned();
 
+    double calcAutoAngularSpeed(double vectorsAngle);
+    
     std::vector<std::string> random_msgs;
+    
+    std::vector<Point> waypoints;
 };
 
 #endif /* HUSKY_MOVER_H */
