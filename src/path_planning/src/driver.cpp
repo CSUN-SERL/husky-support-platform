@@ -11,7 +11,7 @@
  * Created on March 5, 2017, 10:03 PM
  */
 
-/*#include <cstdlib>
+#include <cstdlib>
 #include "PathPlanning.h"
 #include "Obstacle.h"
 #include <stdio.h>
@@ -28,7 +28,7 @@
 #include <utility> // for pair
 #include <algorithm>
 #include <iterator>
-
+/*
 using namespace std;
 
 
@@ -114,6 +114,7 @@ int main(int argc, char** argv) {
 #include <cstdlib>
 #include "ros/ros.h"
 #include "std_msgs/Empty.h"
+#include <std_msgs/String.h>
 #include <lcar_msgs/WorldMap.h>
 #include "ServiceCall.h"
 
@@ -124,6 +125,11 @@ void ServiceCallback(const std_msgs::Empty notify)
     ROS_INFO("updating vector");
     ServiceCall service = ServiceCall();
     service.call();
+}
+void MocapCallback(const std_msgs::String str)
+{
+    std::vector<Obstacle> obstacle_list;
+    ROS_INFO("%s\n", str.data.c_str());
 }
 int main(int argc, char **argv)
 {
@@ -137,10 +143,13 @@ int main(int argc, char **argv)
     {
         ROS_INFO("point x: %f point y: %f point z: %f", srv.response.world_map[3], srv.response.world_map[4], srv.response.world_map[5]);
     }
-    ros::init(argc, argv, "listener");
+    
+    //ros::init(argc, argv, "listener");
     ros::NodeHandle n;
     
     ros::Subscriber sub = n.subscribe("world_map_updated", 1000, ServiceCallback);
+    
+    ros::Subscriber mocap_sub = n.subscribe("mocap_markers", 1000, MocapCallback);
     
     ros::AsyncSpinner spinner(4);
     spinner.start();

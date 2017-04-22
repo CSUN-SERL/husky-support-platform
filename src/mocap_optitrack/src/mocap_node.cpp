@@ -150,27 +150,30 @@ void processMocapData( const char** mocap_model,
           if(format.model.numMarkerSets > 0){
               
               std_msgs::String marker_string;
-              marker_string.data = "";
+              marker_string.data = "{\n";
               for(int i = 0; i < format.model.numMarkerSets; i++)
               {
                   std::string name = format.model.markerSets[i].name;
-                  marker_string.data += name + ": ";
+                  marker_string.data += "\t{\n" + name + ": ";
                   
                   for(int j = 0; j<format.model.markerSets[i].numMarkers; j++)
                   {
                       
-                      std::string markerlocations = " ";
+                      std::string markerlocations = "";
                       std::ostringstream floatstreamX, floatstreamY, floatstreamZ, intstream;
                       floatstreamX << format.model.markerSets[i].markers[j].positionX;
                       floatstreamY << format.model.markerSets[i].markers[j].positionY;
                       floatstreamZ << format.model.markerSets[i].markers[j].positionZ;
                       intstream << j;
                      
-                      markerlocations += " Marker #" + intstream.str() + " : X: " + floatstreamX.str() + " Y:" + floatstreamY.str() + " Z:" + floatstreamZ.str() + " ";
-                      marker_string.data += markerlocations + " ";
+                      markerlocations += "\t\t{\n \t\t Marker #" + intstream.str() + ":\n \t\t\t X: "
+                              + floatstreamX.str() + "\n \t\t\t Y:" + floatstreamY.str()
+                              + "\n \t\t\t Z:" + floatstreamZ.str() + "\n}";
+                      marker_string.data += markerlocations + "\n}";
                   }
                   
               }
+              marker_string.data += "\n}"; 
               marker_pub.publish(marker_string);
           }
         }
