@@ -4,7 +4,14 @@ project(ugv_control)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg message_generation)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg message_generation husky_msgs)
+
+catkin_package(CATKIN_DEPENDS message_runtime)
+##Finds the catkin_package for the husky_msgs
+##Basically it finds the catkin_package that contains the husky_msgs package
+##this is needed with the package.xml tags
+catkin_package(CATKIN_DEPENDS husky_kinetic)
+#add_message_files(FILES HuskyStatus.msg)
 
 set(ugv_control_INCLUDE_DIRECTORIES
         src

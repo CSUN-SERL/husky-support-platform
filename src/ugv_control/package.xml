@@ -36,7 +36,14 @@
   <!-- Use buildtool_depend for build tool packages: -->
   <!--   <buildtool_depend>catkin</buildtool_depend> -->
   <!-- Use run_depend for packages you need at runtime: -->
+  
   <run_depend>message_runtime</run_depend>
+  <!-- needed to get Husky Status Messages, this along with the CMakeLists find package and
+ catkin_package  -->
+ <build_depend>husky_kinetic</build_depend>
+<run_depend>husky_kinetic</run_depend> 
+  
+  
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>

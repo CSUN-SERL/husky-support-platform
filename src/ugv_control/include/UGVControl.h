@@ -10,7 +10,7 @@
 #include "Destination.h"
 #include "VectorAngleCalculator.h"
 #include "Vector.h"
-#include <HuskyStatus.h>
+#include <husky_msgs/HuskyStatus.h>
 #include <fstream>
 
 class UGVControl {
