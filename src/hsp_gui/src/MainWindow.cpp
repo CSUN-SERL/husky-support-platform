@@ -78,11 +78,13 @@ model(new QStandardItemModel(this))
             this, &MainWindow::OnGoClicked);
     
     connect(widget.Get_Battery,&QPushButton::clicked,this, &MainWindow::OnBatteryClick);
+
 }
 
 MainWindow::~MainWindow() {
 
 }
+
 
 void MainWindow::BatteryLooper() {
     //    ros::Rate sleeper(10);
@@ -95,7 +97,8 @@ void MainWindow::BatteryLooper() {
     //    sleep(100);
    int count = 0;
    int total=0;
-   
+   //The infinite while loop, though cring-worthy is needed since one is constantly updating batter
+   //information
     while (1) {
         int integer = husky->GetBattery();
         battery_array[count]=integer;
@@ -270,21 +273,23 @@ void MainWindow::OnCloseClicked() {
 void MainWindow::OnGoClicked() // this will just make the turtle sim go out 10 spaces
 {
     waypoints.clear();
-    for(int i = 0; i < model->rowCount(); i++)
+
+   for(int i = 0; i < model->rowCount(); i++)
     {
         UGVControl::Point p;
         p.x = model->item(i, 0)->data(Qt::DisplayRole).toDouble();
         p.y = model->item(i, 1)->data(Qt::DisplayRole).toDouble();
         waypoints.push_back(p);
     }
-    
+
     husky->setMission(waypoints);
-    husky->startMission();
+
 }
 
 void MainWindow::OnStopClicked() {
     // if you use append itll just add instead of replace the string
     //widget.textEdit->setText("Stopping movement\n");
+
     husky -> stop();
     //linear = 0;
     //angular = 0;

@@ -39,7 +39,7 @@ public slots:
     void onSpeedValueChanged(int value);
     
     void onTimedUpdate();
-    
+
     void OnLeftClicked();
     void OnRightClicked();
     void OnUpClicked();

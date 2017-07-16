@@ -1,3 +1,5 @@
+#include <thread>
+
 #include "UGVControl.h"
 
 UGVControl::UGVControl() {
@@ -94,7 +96,7 @@ void UGVControl::setBatteryStatus(int battery){
 
         UGVControl::buffer=jsonMsg.data;
            //add the chars of batery_percentage and the colon that follows
-
+        std::cout<<jsonMsg.data.at(index);
 }
         void UGVControl::statusCallBack(const husky_msgs::HuskyStatusConstPtr& msg){
             int integer = (msg.get()->charge_estimate *100);
@@ -130,15 +132,18 @@ void UGVControl::initiateSubscribers() {
 }
 
 void UGVControl::setMission(const std::vector<Point>& waypoints) {
-            jSONFileEditorMissionStatusFalse();
+
     this->waypoints = waypoints;
 }
 
 void UGVControl::startMission() {
-
+    jSONFileEditorMissionStatusFalse();
     onMission = true;
     currentWaypoint = 0;
+
+     
     moveToNextWayPoint();
+    
 }
 
 void UGVControl::resumeMission(){
@@ -171,6 +176,8 @@ void UGVControl::moveToNextWayPoint() {
     } else {
         removeMission();
     }
+
+
 }
 
 void UGVControl::crawl(double f) {
